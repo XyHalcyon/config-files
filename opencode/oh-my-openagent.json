@@ -1,0 +1,121 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "deepseek/deepseek-v4-pro",
+      "fallback_models": [
+        "codiz/claude-opus-4-7"
+      ]
+    },
+    "hephaestus": {
+      "model": "codiz/claude-opus-4-7-thinking",
+      "fallback_models": [
+        "codiz/claude-opus-4-7"
+      ]
+    },
+    "prometheus": {
+      "model": "codiz/claude-opus-4-7-thinking",
+      "fallback_models": [
+        "codiz/claude-opus-4-7"
+      ]
+    },
+    "atlas": {
+      "model": "alibaba-cn/qwen-3.7-max",
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro"
+      ]
+    },
+    "oracle": {
+      "model": "codiz/claude-opus-4-7-thinking",
+      "fallback_models": [
+        "codiz/claude-opus-4-7"
+      ]
+    },
+    "metis": {
+      "model": "alibaba-cn/qwen-3.7-max",
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro"
+      ]
+    },
+    "momus": {
+      "model": "alibaba-cn/qwen-3.7-max",
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro"
+      ]
+    },
+    "multimodal-looker": {
+      "model": "codiz/claude-opus-4-7",
+      "fallback_models": [
+        "codiz/claude-opus-4-7-thinking"
+      ]
+    },
+    "librarian": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    },
+    "explore": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    },
+    "sisyphus-junior": {
+      "model": "deepseek/deepseek-v4-pro",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    }
+  },
+  "categories": {
+    "ultrabrain": {
+      "model": "codiz/claude-opus-4-7-thinking",
+      "fallback_models": [
+        "codiz/claude-opus-4-7"
+      ]
+    },
+    "artistry": {
+      "model": "codiz/claude-opus-4-7",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    },
+    "deep": {
+      "model": "codiz/claude-opus-4-7",
+      "fallback_models": [
+        "codiz/claude-opus-4-7-thinking"
+      ]
+    },
+    "visual-engineering": {
+      "model": "codiz/claude-opus-4-7",
+      "fallback_models": [
+        "codiz/claude-opus-4-7-thinking"
+      ]
+    },
+    "unspecified-high": {
+      "model": "alibaba-cn/qwen-3.7-max",
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro"
+      ]
+    },
+    "writing": {
+      "model": "codiz/claude-opus-4-7",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    },
+    "unspecified-low": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    },
+    "quick": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "alibaba-cn/qwen-3.7-max"
+      ]
+    }
+  }
+}

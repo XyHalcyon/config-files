@@ -270,13 +270,13 @@ highlight Search ctermbg=black ctermfg=white guifg=white guibg=black
 """"""""""""""""""""""""""""""""
 """=>在shell脚本开头自动增加解释器以及作者等版权信息<="""
 """"""""""""""""""""""""""""""""
-"新建.py,.cc,.sh,.java文件，自动插入文件头"
-autocmd BufNewFile *.py,*.cc,*.sh,*.java exec ":call SetTitle()"
+"新建.py,.sh文件，自动插入文件头"
+autocmd BufNewFile *.py,*.sh exec ":call SetTitle()"
 "定义函数SetTitle，自动插入文件头"
 func SetTitle()
     if expand ("%:e") == 'sh'
         call setline(1, "#!/bin/bash")
-        call setline(2, "#Author:savioyo")
+        call setline(2, "#Author:author_name")
         call setline(4, "#Time:".strftime("%F %T"))
         call setline(5, "#Name:".expand("%"))
         call setline(6, "#Version:V1.0")

@@ -1,0 +1,25 @@
+{
+  "plugin": ["oh-my-openagent"],
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "*": "allow"
+  },
+  "provider": {
+    "codiz": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Codiz",
+      "options": {
+        "baseURL": "https://codiz.dev/v1",
+        "apiKey": "xxx"
+      },
+      "models": {
+        "claude-opus-4-7": {
+          "name": "claude-opus-4-7"
+        },
+        "claude-opus-4-7-thinking": {
+          "name": "claude-opus-4-7-thinking"
+        }
+      }
+    }
+  }
+}
