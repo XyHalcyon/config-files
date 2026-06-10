@@ -78,6 +78,8 @@ Designed to reduce common LLM coding mistakes through four principles:
 | Goal-Driven Execution | Define success criteria, loop until verified |
 
 > **Note**: These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+>
+> **Source**: Adapted from [multica-ai/andrej-karpathy-skills/CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md).
 
 ---
 
