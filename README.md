@@ -64,6 +64,23 @@ Agent and category model assignments for the Sisyphus orchestration system. Depl
 
 ---
 
+### `opencode/AGENTS.md`
+
+Behavioral guidelines for LLM coding assistants. Deploy to `~/.config/opencode/AGENTS.md`.
+
+Designed to reduce common LLM coding mistakes through four principles:
+
+| Principle | Description |
+|---|---|
+| Think Before Coding | State assumptions, surface tradeoffs, ask when uncertain |
+| Simplicity First | Minimum code that solves the problem, nothing speculative |
+| Surgical Changes | Touch only what you must, match existing style |
+| Goal-Driven Execution | Define success criteria, loop until verified |
+
+> **Note**: These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+
+---
+
 ## Deploy
 
 ```bash
@@ -74,4 +91,5 @@ cp vim/.vimrc ~/.vimrc
 mkdir -p ~/.config/opencode
 cp opencode/opencode.jsonc ~/.config/opencode/
 cp opencode/oh-my-openagent.json ~/.config/opencode/
+cp opencode/AGENTS.md ~/.config/opencode/
 ```
