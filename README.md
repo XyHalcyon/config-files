@@ -83,6 +83,17 @@ Designed to reduce common LLM coding mistakes through four principles:
 
 ---
 
+### `pip/pip.conf`
+
+Pip 包管理器的国内镜像源配置。部署至 `~/.config/pip/pip.conf`。
+
+| 字段 | 值 | 说明 |
+|---|---|---|
+| `index-url` | `http://mirrors.aliyun.com/pypi/simple/` | 使用阿里云 PyPI 镜像加速下载 |
+| `trusted-host` | `mirrors.aliyun.com` | 信任 HTTP 镜像源（非 HTTPS） |
+
+---
+
 ## Deploy
 
 ```bash
@@ -94,4 +105,8 @@ mkdir -p ~/.config/opencode
 cp opencode/opencode.jsonc ~/.config/opencode/
 cp opencode/oh-my-openagent.json ~/.config/opencode/
 cp opencode/AGENTS.md ~/.config/opencode/
+
+# Pip
+mkdir -p ~/.config/pip
+cp pip/pip.conf ~/.config/pip/
 ```
