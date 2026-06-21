@@ -1,3 +1,8 @@
 # AGENTS.md - AI agent instruction files
 AGENTS.md
 
+# CodeGraph local cache
+.codegraph/
+
+# Omo local data
+.omo/
