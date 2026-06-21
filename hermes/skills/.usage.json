@@ -1,0 +1,93 @@
+{
+  "dingtalk-integration": {
+    "archived_at": null,
+    "created_at": "2026-06-20T16:47:24.599419+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-06-20T16:47:34.485266+00:00",
+    "last_used_at": null,
+    "last_viewed_at": null,
+    "patch_count": 1,
+    "pinned": false,
+    "state": "active",
+    "use_count": 0,
+    "view_count": 0
+  },
+  "gateway-debugging": {
+    "archived_at": null,
+    "created_at": "2026-06-20T16:43:29.848373+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-06-20T16:43:49.825150+00:00",
+    "last_used_at": null,
+    "last_viewed_at": null,
+    "patch_count": 2,
+    "pinned": false,
+    "state": "active",
+    "use_count": 0,
+    "view_count": 0
+  },
+  "hermes-agent": {
+    "archived_at": null,
+    "created_at": "2026-06-20T15:36:25.658577+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-06-21T11:08:01.261980+00:00",
+    "last_viewed_at": "2026-06-21T11:08:01.261980+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 5,
+    "view_count": 5
+  },
+  "hermes-model-validation": {
+    "archived_at": null,
+    "created_at": "2026-06-21T11:28:09.167386+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-06-21T11:28:47.172288+00:00",
+    "last_used_at": null,
+    "last_viewed_at": null,
+    "patch_count": 1,
+    "pinned": false,
+    "state": "active",
+    "use_count": 0,
+    "view_count": 0
+  },
+  "messaging-platform-setup": {
+    "archived_at": null,
+    "created_at": "2026-06-20T16:36:35.622847+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-06-20T16:36:42.624480+00:00",
+    "last_used_at": "2026-06-20T16:36:44.357750+00:00",
+    "last_viewed_at": "2026-06-20T16:36:44.351441+00:00",
+    "patch_count": 1,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
+  "obsidian": {
+    "archived_at": null,
+    "created_at": "2026-06-21T01:20:45.020744+00:00",
+    "created_by": null,
+    "last_patched_at": "2026-06-21T10:30:11.089051+00:00",
+    "last_used_at": "2026-06-21T11:20:21.541437+00:00",
+    "last_viewed_at": "2026-06-21T11:20:21.531228+00:00",
+    "patch_count": 3,
+    "pinned": false,
+    "state": "active",
+    "use_count": 7,
+    "view_count": 5
+  },
+  "opencode": {
+    "archived_at": null,
+    "created_at": "2026-06-21T01:41:07.742270+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_used_at": "2026-06-21T01:48:06.186089+00:00",
+    "last_viewed_at": "2026-06-21T01:41:07.742270+00:00",
+    "patch_count": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 2,
+    "view_count": 1
+  }
+}

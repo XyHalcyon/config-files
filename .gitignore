@@ -1,2 +1,5 @@
 # AGENTS.md - AI agent instruction files
 AGENTS.md
+
+# Hermes sensitive credentials
+hermes/.env

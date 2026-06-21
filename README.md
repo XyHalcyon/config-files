@@ -94,6 +94,85 @@ Pip 包管理器的国内镜像源配置。部署至 `~/.config/pip/pip.conf`。
 
 ---
 
+### `hermes/config.yaml`
+
+Hermes Agent 主配置文件。部署至 `~/.hermes/config.yaml`。
+
+**模型配置：**
+
+| 用途 | 模型 | 提供商 | 说明 |
+|---|---|---|---|
+| 主模型 | `qwen3.7-max` | dashscope | 阿里云通义千问，主力对话模型 |
+| 委派模型 | `glm-5.1` | dashscope | 智谱 GLM，用于子代理委派任务 |
+| 视觉辅助 | `deepseek-v4-flash` | deepseek | 图片分析辅助 |
+| 网页提取 | `deepseek-v4-flash` | deepseek | 网页内容提取辅助 |
+| X 搜索 | `grok-4.20-reasoning` | xAI | X/Twitter 搜索（需 XAI API Key） |
+| 其他辅助 | auto | 继承主模型 | 压缩、标题生成、策展等 11 项自动选择 |
+
+**核心设置：**
+
+| 配置项 | 值 | 说明 |
+|---|---|---|
+| `agent.max_turns` | 150 | 单次对话最大轮次 |
+| `agent.gateway_timeout` | 1800 | Gateway 超时（秒） |
+| `agent.reasoning_effort` | medium | 推理力度 |
+| `terminal.backend` | local | 终端后端（本地执行） |
+| `terminal.timeout` | 180 | 命令超时（秒） |
+| `compression.enabled` | true | 上下文压缩 |
+| `memory.memory_enabled` | true | 持久化记忆 |
+| `memory.memory_char_limit` | 2200 | 记忆字符上限 |
+| `delegation.max_concurrent_children` | 3 | 最大并行子代理数 |
+| `delegation.max_spawn_depth` | 1 | 子代理嵌套深度 |
+| `tts.provider` | edge | 文字转语音（微软 Edge） |
+| `stt.provider` | local | 语音转文字（Whisper 本地） |
+| `display.streaming` | true | 流式输出 |
+| `security.redact_secrets` | true | 自动脱敏敏感信息 |
+
+**消息平台：** 已配置钉钉（DingTalk）Stream 模式集成。
+
+**工具集：** CLI 平台启用 browser、clarify、code_execution、computer_use、cronjob、delegation、file、image_gen、memory、session_search、skills、terminal、todo、tts、vision、web。
+
+---
+
+### `hermes/.env`
+
+Hermes Agent API 密钥文件。部署至 `~/.hermes/.env`。
+
+> **Warning**: 包含敏感凭据，请勿上传至公开仓库。
+
+| 变量 | 用途 |
+|---|---|
+| `DASHSCOPE_API_KEY` | 阿里云 DashScope（通义千问、智谱 GLM） |
+| `DEEPSEEK_API_KEY` | DeepSeek API |
+| `DINGTALK_CLIENT_SECRET` | 钉钉 Stream 模式客户端密钥 |
+
+**凭据解析机制：** `config.yaml` 仅声明 provider 名称（如 `dashscope`、`deepseek`），Hermes 启动时加载 `.env` 到环境变量，再按命名约定自动查找对应的 `<PROVIDER>_API_KEY`。解析结果记录在自动生成的 `auth.json` 中（`source: env:XXX_API_KEY`），无需手动维护。
+
+---
+
+### `hermes/skills/`
+
+Hermes Agent 技能库。部署至 `~/.hermes/skills/`。
+
+包含 436 个文件，覆盖 11 个分类：
+
+| 分类 | 技能数 | 代表技能 |
+|---|---|---|
+| `autonomous-ai-agents` | 2 | hermes-agent, opencode |
+| `creative` | 14 | architecture-diagram, ascii-art, comfyui, excalidraw, p5js |
+| `data-science` | 1 | jupyter-live-kernel |
+| `devops` | 6 | dingtalk-integration, gateway-debugging, kanban-orchestrator |
+| `dogfood` | 1 | dogfood |
+| `email` | 1 | himalaya |
+| `github` | 6 | github-pr-workflow, github-code-review, github-repo-management |
+| `mlops` | 8 | llama-cpp, segment-anything, weights-and-biases, huggingface-hub |
+| `note-taking` | 1 | obsidian |
+| `productivity` | 7 | airtable, maps, notion, ocr-and-documents, powerpoint |
+| `research` | 5 | arxiv, blogwatcher, llm-wiki, polymarket, research-paper-writing |
+| `software-development` | 9 | plan, systematic-debugging, test-driven-development, spike |
+
+---
+
 ## Deploy
 
 ```bash
@@ -109,4 +188,10 @@ cp opencode/AGENTS.md ~/.config/opencode/
 # Pip
 mkdir -p ~/.config/pip
 cp pip/pip.conf ~/.config/pip/
+
+# Hermes
+mkdir -p ~/.hermes
+cp hermes/config.yaml ~/.hermes/
+cp hermes/.env ~/.hermes/
+cp -r hermes/skills ~/.hermes/
 ```
