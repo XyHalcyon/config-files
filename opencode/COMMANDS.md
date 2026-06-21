@@ -1,250 +1,257 @@
-# Opencode 常用命令参考
+# Opencode 常用命令速查
 
-> 在 Opencode 对话中直接输入命令（以 `/` 开头），或者提及命令描述中的触发词即可激活。
+## 一、基础操作
 
----
+### 启动与运行
 
-## 项目管理
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode` | 启动交互式 TUI 会话 | `opencode` |
+| `opencode [project]` | 在指定目录启动 | `opencode ~/my-project` |
+| `opencode run "消息"` | 单次非交互式执行 | `opencode run "解释这段代码"` |
+| `opencode run -c "消息"` | 继续最近会话并执行 | `opencode run -c "继续上次的任务"` |
+| `opencode -c` | 在 TUI 中继续最近会话 | `opencode -c` |
+| `opencode -s SESSION_ID` | 恢复指定会话 | `opencode -s abc123def` |
+| `opencode --fork -c` | Fork 最近会话（分支新会话） | `opencode --fork -c` |
+| `opencode -m provider/model` | 指定模型启动 | `opencode -m codiz/claude-opus-4-7` |
+| `opencode --agent NAME` | 指定 Agent 启动 | `opencode --agent sisyphus` |
+| `opencode --prompt "提示"` | 带初始提示启动 | `opencode --prompt "你是安全专家"` |
 
-### `/hyperplan` — 多智能体对抗性规划
+### Server 模式
 
-通过团队模式（5 个敌对角色交叉评审，主代理综合）进行规划。
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode serve` | 启动 Headless 服务 | `opencode serve --port 4096` |
+| `opencode web` | 启动服务并打开 Web 界面 | `opencode web` |
+| `opencode attach <url>` | 连接到运行中的服务 | `opencode attach http://localhost:4096` |
+| `opencode acp` | 启动 ACP (Agent Client Protocol) 服务 | `opencode acp` |
 
-```
-/hyperplan 为电商后台管理系统设计架构
-```
+### 全局选项
 
-### `/start-work` — 执行工作计划
-
-从 Prometheus 生成的工作计划开始执行。
-
-```
-/start-work
-
-# 或者加载特定计划文件
-/start-work .omo/plans/user-auth-plan.md
-```
-
-### `/ulw-plan` — 探索先行规划
-
-编码前必用：5+ 步骤、模糊范围、多模块、架构决策等场景。
-
-```
-/ulw-plan 为 REST API 添加 JWT 认证功能
-/ulw-plan 重构用户管理模块，支持多租户
-```
-
----
-
-## 开发辅助
-
-### `/programming` — 严格类型编程
-
-处理 `.py` `.rs` `.ts` `.go` 文件。强制严格类型、现代技术栈、TDD。
-
-```
-/programming 用 Rust 实现一个线程安全的 LRU 缓存
-/programming 在 TypeScript 中实现 Zod schema 验证
-```
-
-### `/refactor` — 智能重构
-
-通过 LSP、AST-grep、架构分析等工具进行智能重构。
-
-```
-/refactor 将 UserService 中的验证逻辑提取到独立模块
-/refactor 简化 src/utils 目录下的工具函数
-```
-
-### `/ast-grep` — AST 结构化搜索
-
-用 AST 语法树进行代码搜索和批量修改，比正则更精确。
-
-```
-# 搜索所有 React 函数组件
-/ast-grep 查找所有 export function 的 React 组件
-
-# 批量替换模式
-/ast-grep 将所有 console.log 替换为 logger.info
-```
-
-### `/lsp-setup` — LSP 配置
-
-配置语言服务器，让编辑器提供诊断、跳转定义、查找引用等功能。
-
-```
-/lsp-setup 为 Python 项目配置 basedpyright
-/lsp-setup 为 TypeScript 项目配置 LSP
-```
+| 选项 | 说明 | 示例 |
+|---|---|---|
+| `-m, --model` | 指定模型 (provider/model) | `opencode -m deepseek/deepseek-v4-pro` |
+| `-c, --continue` | 继续最近会话 | `opencode -c` |
+| `-s, --session` | 指定会话 ID | `opencode -s abc123` |
+| `-h, --help` | 显示帮助 | `opencode --help` |
+| `-v, --version` | 显示版本号 | `opencode -v` |
+| `--log-level` | 日志级别 (DEBUG/INFO/WARN/ERROR) | `opencode --log-level DEBUG` |
+| `--pure` | 无插件模式运行 | `opencode --pure` |
+| `--print-logs` | 日志输出到 stderr | `opencode --print-logs` |
 
 ---
 
-## Git 操作
+## 二、会话管理
 
-### `/git-master` — Git 专家操作
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode session list` | 列出所有会话 | `opencode session list` |
+| `opencode session delete <ID>` | 删除指定会话 | `opencode session delete abc123def` |
+| `opencode export [sessionID]` | 导出会话为 JSON | `opencode export abc123def > backup.json` |
+| `opencode export --sanitize <ID>` | 导出并脱敏敏感信息 | `opencode export --sanitize abc123def` |
+| `opencode import <file>` | 从 JSON 文件导入会话 | `opencode import backup.json` |
+| `opencode import <url>` | 从 URL 导入会话 | `opencode import https://example.com/session.json` |
+| `opencode stats` | 查看 Token 用量和费用统计 | `opencode stats` |
+| `opencode -c` | 在 TUI 中继续最近会话 | `opencode -c` |
+| `opencode --fork -c` | Fork 最近会话 | `opencode --fork -c` |
 
-原子提交、变基、历史搜索（blame、bisect、log -S）。
+### run 子命令选项
 
-```
-/git-master 提交当前所有更改，commit message 为 "feat: add user auth"
-/git-master 查找是谁添加了 src/auth.ts 第 42 行
-/git-master 将最近 3 个 commit 合并为一个
-```
+| 选项 | 说明 | 示例 |
+|---|---|---|
+| `-f, --file` | 附带文件到消息 | `opencode run "review" -f src/main.ts` |
+| `--title` | 设置会话标题 | `opencode run "debug" --title "Auth Fix"` |
+| `--format json` | JSON 格式输出 | `opencode run "hello" --format json` |
+| `--share` | 分享会话 | `opencode run -c --share` |
+| `-i, --interactive` | 交互式分屏模式 | `opencode run "help" -i` |
+| `--thinking` | 显示思考过程 | `opencode run "复杂问题" --thinking` |
+| `--variant` | 模型推理力度 (high/max/minimal) | `opencode run "..." --variant high` |
+| `--command` | 指定 slash 命令 | `opencode run --command /git-master "commit"` |
 
 ---
 
-## 前端开发
+## 三、Provider 与模型
 
-### `/frontend` — 前端/UI/UX
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode providers list` | 列出已配置的 Provider | `opencode providers list` |
+| `opencode providers login [url]` | 登录 Provider | `opencode providers login` |
+| `opencode providers logout [provider]` | 登出 Provider | `opencode providers logout codiz` |
+| `opencode models [provider]` | 列出所有可用模型 | `opencode models` |
+| `opencode models codiz` | 列出指定 Provider 的模型 | `opencode models codiz` |
 
-构建页面/组件、性能审计、设计 QA。自动调用设计规则、Lighthouse 审计、UI/UX 数据库。
+### Provider 配置示例
 
-```
-/frontend 创建一个现代化的登录页面
-/frontend 审计当前页面的 Lighthouse 性能
-/frontend 为 Sidebar 组件添加深色模式支持
-```
+在 `~/.config/opencode/opencode.jsonc` 中：
 
-### `/visual-qa` — 视觉回归测试
-
-对 Web 页面和终端 UI 进行严格的视觉 QA，截图对比。
-
-```
-/visual-qa 检查 Dashboard 页面是否有布局偏移
-/visual-qa 对比首页改版前后的视觉效果
+```jsonc
+{
+  "provider": {
+    "codiz": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Codiz",
+      "options": {
+        "baseURL": "https://codiz.dev/v1",
+        "apiKey": "your-api-key"
+      },
+      "models": {
+        "claude-opus-4-7": { "name": "claude-opus-4-7" },
+        "claude-opus-4-7-thinking": { "name": "claude-opus-4-7-thinking" }
+      }
+    }
+  }
+}
 ```
 
 ---
 
-## 质量保证
+## 四、MCP 服务器
 
-### `/review-work` — 实现后审查
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode mcp list` | 列出 MCP 服务器及状态 | `opencode mcp list` |
+| `opencode mcp add [name]` | 添加 MCP 服务器 | 见下方示例 |
+| `opencode mcp auth [name]` | OAuth 认证 | `opencode mcp auth github` |
+| `opencode mcp logout [name]` | 移除 OAuth 凭据 | `opencode mcp logout github` |
+| `opencode mcp debug <name>` | 调试 OAuth 连接 | `opencode mcp debug github` |
 
-启动 5 个并行后台代理进行全面审查：目标验证、代码质量、安全性、手工 QA、上下文挖掘。
-
-```
-/review-work 审查刚才的用户认证模块实现
-```
-
-### `/remove-ai-slops` — 清理 AI 代码异味
-
-移除 AI 生成代码中的 10 类常见问题：过度复杂、超长模块、冗余注释等。
+### 添加 MCP 服务器示例
 
 ```
-/remove-ai-slops 清理 src/api/routes/ 下的代码
-/remove-ai-slops 检查最近 3 个 commit 的更改
-```
+# 添加远程 MCP 服务器
+opencode mcp add my-server --url http://localhost:3000
 
-### `/security-review` — 安全审查
+# 添加带环境变量的本地 MCP 服务器
+opencode mcp add playwright --env PLAYWRIGHT_BROWSER=chromium
 
-启动 3 个漏洞猎手 + 2 个 PoC 工程师并行审查代码库。
-
-```
-/security-review 审查 src/api/ 目录
-/security-review 审计最近添加的支付模块
+# 添加带 HTTP Header 的远程服务器
+opencode mcp add api --url https://api.example.com --header "Authorization: Bearer token"
 ```
 
 ---
 
-## 调试
+## 五、Agent 管理
 
-### `/debugging` — 运行时调试
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode agent list` | 列出所有 Agent | `opencode agent list` |
+| `opencode agent create` | 创建新 Agent | `opencode agent create` |
+| `opencode debug agent <name>` | 查看 Agent 配置详情 | `opencode debug agent sisyphus` |
 
-跨语言运行时调试：崩溃、静默失败、错误响应、死锁、内存泄漏、反向工程。
+### Agent 与 Category 对照
 
-```
-/debugging 为什么 Express 服务器间歇性返回 500
-/debugging 定位 React 组件的无限重渲染问题
-```
-
----
-
-## 浏览器自动化
-
-### `/playwright` — 浏览器自动化
-
-通过 Playwright 进行浏览器操作：验证、信息收集、网页抓取、测试、截图。
-
-```
-/playwright 打开 https://example.com 并截图
-/playwright 测试登录流程是否正常
-/playwright 抓取 GitHub Trending 页面数据
-```
+| Agent | 用途 | Category | 用途 |
+|---|---|---|---|
+| `sisyphus` | 主编排器 | `ultrabrain` | 高难度逻辑/架构 |
+| `hephaestus` | 构建器 | `deep` | 自主研究+实现 |
+| `prometheus` | 规划器 | `visual-engineering` | 前端/UI/样式 |
+| `oracle` | 高 IQ 推理顾问 | `quick` | 简单单文件修改 |
+| `explore` / `librarian` | 代码搜索 | `artistry` | 创意方案 |
+| `metis` / `momus` | 规划/审查 | `writing` | 文档/写作 |
 
 ---
 
-## 会话管理
+## 六、Plugin 插件
 
-### `/handoff` — 上下文交接
-
-创建详细的上下文摘要，用于在新会话中继续工作。
-
-```
-/handoff
-
-# 输出示例：
-# Session: ses_abc123 | Messages: 45 | Todo: 8/12 completed
-# Current task: Implementing JWT auth middleware
-# Blocked on: Waiting for Oracle review result
-```
-
-### `/stop-continuation` — 停止续作
-
-停止当前会话的所有续作机制（ralph loop、todo continuation、boulder）。
-
-```
-/stop-continuation
-```
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode plugin <module>` | 安装插件并更新配置 | `opencode plugin oh-my-openagent` |
 
 ---
 
-## 循环模式
+## 七、GitHub 集成
 
-### `/ralph-loop` — 自引用开发循环
-
-启动自引用开发循环直到完成。
-
-```
-/ralph-loop 完善用户认证系统的所有边缘情况
-```
-
-### `/ulw-loop` — Ultrawork 循环
-
-启动 ultrawork 模式，持续执行直到完成。
-
-```
-/ulw-loop 完成整个购物车功能的开发
-```
-
-### `/cancel-ralph` — 取消循环
-
-取消活跃的 Ralph Loop。
-
-```
-/cancel-ralph
-```
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode github install` | 安装 GitHub Agent | `opencode github install` |
+| `opencode github run` | 运行 GitHub Agent | `opencode github run` |
+| `opencode pr <number>` | 拉取 PR 分支并运行 | `opencode pr 42` |
 
 ---
 
-## 初始化
+## 八、诊断与调试
 
-### `/init-deep` — 初始化知识库
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode debug config` | 显示解析后的完整配置 | `opencode debug config` |
+| `opencode debug paths` | 显示全局路径 | `opencode debug paths` |
+| `opencode debug lsp` | LSP 调试工具 | `opencode debug lsp` |
+| `opencode debug skill` | 列出所有可用 Skill | `opencode debug skill` |
+| `opencode debug agent <name>` | 查看 Agent 配置详情 | `opencode debug agent oracle` |
+| `opencode debug info` | 显示调试信息 | `opencode debug info` |
+| `opencode debug startup` | 打印启动耗时 | `opencode debug startup` |
+| `opencode stats` | Token 用量和费用统计 | `opencode stats` |
 
-初始化分层 AGENTS.md 知识库。
+### 升级与卸载
 
-```
-/init-deep
-
-# 在项目中生成/更新：
-# - AGENTS.md（根级行为指南）
-# - 各子目录的 AGENTS.md（按需）
-```
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `opencode upgrade` | 升级到最新版本 | `opencode upgrade` |
+| `opencode upgrade [target]` | 升级到指定版本 | `opencode upgrade 1.0.0` |
+| `opencode uninstall` | 卸载并清除所有文件 | `opencode uninstall` |
 
 ---
 
-## 触发词速查
+## 九、会话内 Slash 命令
 
-很多命令不需要手动输入 `/`，提到以下关键词即可自动触发：
+> 在 TUI 交互式会话中，输入 `/` 开头触发。
+
+### 代码开发
+
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `/frontend` | 前端/UI/UX/设计开发 | `/frontend 创建 Dashboard 页面` |
+| `/programming` | 严格类型编程 (.py/.rs/.ts/.go) | `/programming 实现 LRU 缓存` |
+| `/refactor` | 智能重构 | `/refactor 提取验证逻辑` |
+| `/ast-grep` | AST 结构化搜索与批量修改 | `/ast-grep 替换 console.log` |
+| `/lsp-setup` | 配置 Language Server | `/lsp-setup 配置 Python LSP` |
+
+### Git 操作
+
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `/git-master` | Git 原子提交/变基/历史搜索 | `/git-master 提交当前更改` |
+
+### 质量保证
+
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `/review-work` | 启动 5 路并行审查 | `/review-work` |
+| `/remove-ai-slops` | 清理 AI 代码异味 | `/remove-ai-slops` |
+| `/security-review` | 安全审查（3 漏洞猎手 + 2 PoC） | `/security-review 审查 src/api/` |
+| `/visual-qa` | 视觉回归测试 | `/visual-qa 检查页面布局` |
+
+### 调试
+
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `/debugging` | 运行时交叉调试 | `/debugging 定位内存泄漏` |
+| `/playwright` | 浏览器自动化 | `/playwright 截图 example.com` |
+
+### 规划与执行
+
+| 命令 | 说明 | 示例 |
+|---|---|---|
+| `/ulw-plan` | 探索先行规划 | `/ulw-plan 实现 JWT 认证` |
+| `/hyperplan` | 多智能体对抗性规划 | `/hyperplan 设计微服务架构` |
+| `/start-work` | 执行工作计划 | `/start-work .omo/plans/auth.md` |
+| `/init-deep` | 初始化 AGENTS.md 知识库 | `/init-deep` |
+
+### 会话控制
+
+| 命令 | 说明 |
+|---|---|
+| `/handoff` | 创建上下文摘要用于新会话 |
+| `/stop-continuation` | 停止所有续作机制 |
+| `/ralph-loop` | 启动自引用开发循环 |
+| `/ulw-loop` | 启动 Ultrawork 循环 |
+| `/cancel-ralph` | 取消活跃循环 |
+
+---
+
+## 十、触发词速查
+
+> 无需手动输入 `/`，对话中提及以下关键词即可自动触发。
 
 | 触发词 | 对应命令 | 说明 |
 |---|---|---|
@@ -255,52 +262,88 @@
 | `review work`、`verify implementation` | `/review-work` | 实现审查 |
 | `remove AI slops`、`clean AI code` | `/remove-ai-slops` | 清理 AI 代码 |
 | `visual QA`、`screenshot diff` | `/visual-qa` | 视觉 QA |
-| `refactor`、`cleanup`、`extract` | `/refactor` | 重构 |
+| `refactor`、`cleanup`、`restructure` | `/refactor` | 重构 |
 | `LSP`、`language server`、`语言服务器` | `/lsp-setup` | LSP 配置 |
-| `plan this`、`make a plan`、`规划` | `/ulw-plan` | 规划 |
+| `plan this`、`make a plan`、`break this down` | `/ulw-plan` | 规划 |
 
 ---
 
-## 工作流示例
+## 十一、常用工作流
 
-### 典型新功能开发流程
+### 新功能开发
 
 ```
 # 1. 规划
 /ulw-plan 为博客系统添加评论功能
 
-# 2. 开始执行计划
+# 2. 执行计划
 /start-work
 
-# 3. 实现完成后审查
+# 3. 审查
 /review-work
 
-# 4. 清理 AI 代码异味
+# 4. 清理
 /remove-ai-slops
 ```
 
-### 调试修复流程
+### 调试修复
 
 ```
-# 1. 描述问题
-/debugging 用户登录后 Token 过期不自动刷新
+# 1. 定位问题
+/debugging Token 过期后不自动刷新
 
-# 2. 修复后验证
-/git-master 提交修复
+# 2. 提交修复
+/git-master 提交修复并推送
 
 # 3. 审查
 /review-work
 ```
 
-### 前端页面开发流程
+### 前端页面开发
 
 ```
 # 1. 创建页面
-/frontend 创建设置页面，包含个人信息和通知偏好
+/frontend 创建设置页面（个人信息 + 通知偏好）
 
 # 2. 视觉验证
-/visual-qa 检查设置页面在不同分辨率下的布局
+/visual-qa 检查设置页面多分辨率布局
 
 # 3. 性能审计
-/frontend 审计设置页面的 Lighthouse 性能
+/frontend 审计设置页面 Lighthouse 性能
 ```
+
+### CLI 单次执行
+
+```
+# 快速问答
+opencode run "什么是 Rust 的所有权系统？"
+
+# 带文件审查
+opencode run "review this code" -f src/main.ts
+
+# 指定模型
+opencode run "解释量子计算" -m codiz/claude-opus-4-7-thinking
+
+# 继续上次会话
+opencode run -c "继续实现剩余的接口"
+```
+
+---
+
+## 关键路径速查
+
+```
+~/.config/opencode/opencode.jsonc          主配置文件
+~/.config/opencode/oh-my-openagent.json    Agent/Category 模型分配
+~/.config/opencode/AGENTS.md               行为指南
+~/.local/share/opencode/                   会话数据 (SQLite)
+~/.cache/opencode/                         缓存文件
+~/.local/state/opencode/                   状态文件
+```
+
+## 文档链接
+
+- 官方仓库: https://github.com/anthropics/opencode
+- CLI 命令参考: `opencode --help`
+- 子命令帮助: `opencode <command> --help`
+- Agent 配置: https://github.com/code-yeongyu/oh-my-openagent
