@@ -173,6 +173,27 @@ Hermes Agent 技能库。部署至 `~/.hermes/skills/`。
 
 ---
 
+### `hermes/commands.md`
+
+Hermes Agent 常用命令速查手册。
+
+涵盖 10 大类命令：
+
+| 分类 | 内容 |
+|---|---|
+| 基础操作 | 启动、退出、会话控制 |
+| 配置管理 | config、model、auth |
+| 工具与技能 | tools、skills 管理 |
+| Gateway | 消息平台配置与管理（含钉钉接入示例） |
+| 定时任务 | Cron 创建、管理、调度 |
+| 会话管理 | 会话列表、导出、清理 |
+| MCP 服务器 | 添加、测试、配置 MCP |
+| Profile | 多配置切换与克隆 |
+| 诊断与排查 | doctor、status、insights |
+| 高级操作 | 语音、人格、推理力度、后台任务 |
+
+---
+
 ## Deploy
 
 ```bash
@@ -193,5 +214,6 @@ cp pip/pip.conf ~/.config/pip/
 mkdir -p ~/.hermes
 cp hermes/config.yaml ~/.hermes/
 cp hermes/.env ~/.hermes/
+cp hermes/commands.md ~/.hermes/
 cp -r hermes/skills ~/.hermes/
 ```
