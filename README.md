@@ -214,6 +214,5 @@ cp pip/pip.conf ~/.config/pip/
 mkdir -p ~/.hermes
 cp hermes/config.yaml ~/.hermes/
 cp hermes/.env ~/.hermes/
-cp hermes/commands.md ~/.hermes/
 cp -r hermes/skills ~/.hermes/
 ```
