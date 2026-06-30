@@ -1,14 +1,14 @@
 # config-files
 
-Personal dotfiles and configuration files.
+个人 dotfiles 与配置文件集合。
 
-## Files
+## 文件
 
 ### `vim/.vimrc`
 
-Vim editor configuration. Deploy to `~/.vimrc`.
+Vim 编辑器配置。部署至 `~/.vimrc`。
 
-**Sections:**
+**功能分区：**
 
 | Section | Key Settings |
 |---|---|
@@ -20,66 +20,68 @@ Vim editor configuration. Deploy to `~/.vimrc`.
 | 编码设置 (Encoding) | `encoding=utf-8`, `langmenu=zh_CN.UTF-8` |
 | 其他 (Other) | `laststatus=2`, `clipboard+=unnamed`, `nobackup` |
 
-**Auto-header**: Automatically inserts author/timestamp/description header when creating new `.py` or `.sh` files.
+**自动文件头：** 创建 `.py` 或 `.sh` 文件时自动插入作者、时间戳、描述信息。
 
 ---
 
 ### `opencode/opencode.jsonc`
 
-OpenCode main configuration. Deploy to `~/.config/opencode/opencode.jsonc`.
+OpenCode 主配置文件。部署至 `~/.config/opencode/opencode.jsonc`。
 
-- **Provider**: Codiz (Anthropic-compatible API via `@ai-sdk/anthropic`) at `https://codiz.dev/v1`
-- **Plugin**: `oh-my-openagent` for agent orchestration
-- **Permissions**: `*` → `allow` (all tool calls permitted)
-- **Models**: `claude-opus-4-7` and `claude-opus-4-7-thinking`
+- **Provider**：Codiz（Anthropic 兼容 API，基于 `@ai-sdk/anthropic`），地址 `https://codiz.dev/v1`
+- **Models**（Codiz）：`claude-opus-4-7` 和 `claude-opus-4-7-thinking`
+- **Provider**：bailian-payg（阿里云百炼 Model Studio，Anthropic 兼容 API，基于 `@ai-sdk/anthropic`），地址 `https://dashscope.aliyuncs.com/apps/anthropic/v1`
+- **Models**（bailian-payg）：`glm-5.2`（GLM-5.2）和 `qwen3.7-max`（Qwen3.7 Max），均启用 thinking 模式（budgetTokens=8192）
+- **Plugin**：`oh-my-openagent`，用于代理编排
+- **Permissions**：`*` → `allow`（允许所有工具调用）
 
-> **Note**: The `apiKey` field contains a placeholder (`xxx`). Replace it with your actual Codiz API key.
+> **注意**：`apiKey` 字段为占位符（`xxx`），请替换为实际的 Codiz API 密钥。
 
 ---
 
 ### `opencode/oh-my-openagent.json`
 
-Agent and category model assignments for the Sisyphus orchestration system. Deploy to `~/.config/opencode/oh-my-openagent.json`.
+Sisyphus 编排系统的代理与分类模型分配。部署至 `~/.config/opencode/oh-my-openagent.json`。
 
-**Agents** — each agent is assigned a primary model and fallback:
+**Agents** — 各代理的主模型与回退模型分配：
 
-| Agent | Primary Model | Role |
+| Agent | Primary Model | 角色 |
 |---|---|---|
-| `sisyphus` | `deepseek/deepseek-v4-pro` | Main orchestrator |
-| `hephaestus` | `codiz/claude-opus-4-7-thinking` | Builder |
-| `prometheus` | `codiz/claude-opus-4-7-thinking` | Planner |
-| `oracle` | `codiz/claude-opus-4-7-thinking` | High-IQ reasoning consultant |
-| `explore` / `librarian` | `deepseek/deepseek-v4-flash` | Contextual / reference grep |
-| `metis` / `momus` / `atlas` | `alibaba-cn/qwen-3.7-max` | Planning / review |
+| `sisyphus` | `deepseek/deepseek-v4-pro` | 主编排器 |
+| `hephaestus` | `codiz/claude-opus-4-7-thinking` | 构建器 |
+| `prometheus` | `codiz/claude-opus-4-7-thinking` | 规划器 |
+| `oracle` | `codiz/claude-opus-4-7-thinking` | 高智商推理顾问 |
+| `explore` / `librarian` | `deepseek/deepseek-v4-flash` | 上下文 / 参考搜索 |
+| `metis` / `momus` / `atlas` | `alibaba-cn/qwen-3.7-max` | 规划 / 审查 |
 
-**Categories** — task-type to model mapping:
+**Categories** — 任务类型到模型的映射：
 
-| Category | Primary Model | Use Case |
+| Category | Primary Model | 用途 |
 |---|---|---|
-| `ultrabrain` | `codiz/claude-opus-4-7-thinking` | Hard logic / architecture |
-| `deep` | `codiz/claude-opus-4-7` | Autonomous research + implementation |
-| `visual-engineering` | `codiz/claude-opus-4-7` | Frontend / UI / styling |
-| `quick` | `deepseek/deepseek-v4-flash` | Trivial single-file changes |
-| `writing` | `codiz/claude-opus-4-7` | Documentation / prose |
+| `ultrabrain` | `codiz/claude-opus-4-7-thinking` | 复杂逻辑 / 架构 |
+| `deep` | `codiz/claude-opus-4-7` | 自主研究 + 实现 |
+| `visual-engineering` | `codiz/claude-opus-4-7` | 前端 / UI / 样式 |
+| `quick` | `deepseek/deepseek-v4-flash` | 简单单文件修改 |
+| `writing` | `codiz/claude-opus-4-7` | 文档 / 写作 |
 
 ---
 
 ### `opencode/AGENTS.md`
 
-Behavioral guidelines for LLM coding assistants. Deploy to `~/.config/opencode/AGENTS.md`.
+LLM 编码助手行为指南。部署至 `~/.config/opencode/AGENTS.md`。
 
-Designed to reduce common LLM coding mistakes through four principles:
+通过四项原则减少常见 LLM 编码错误：
 
-| Principle | Description |
+| 原则 | 说明 |
 |---|---|
-| Think Before Coding | State assumptions, surface tradeoffs, ask when uncertain |
-| Simplicity First | Minimum code that solves the problem, nothing speculative |
-| Surgical Changes | Touch only what you must, match existing style |
-| Goal-Driven Execution | Define success criteria, loop until verified |
+| 编码前先思考 | 明确假设，呈现权衡，不确定时提问 |
+| 简洁优先 | 用最少代码解决问题，不做推测性设计 |
+| 精准修改 | 只动该动的部分，遵循既有风格 |
+| 目标驱动 | 定义成功标准，循环直至验证通过 |
 
-> **Note**: These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+> **注意**：这些指南偏向谨慎而非速度。对于简单任务，自行判断。
 >
-> **Source**: Adapted from [multica-ai/andrej-karpathy-skills/CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md).
+> **来源**：改编自 [multica-ai/andrej-karpathy-skills/CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md)。
 
 ---
 
@@ -91,6 +93,32 @@ Pip 包管理器的国内镜像源配置。部署至 `~/.config/pip/pip.conf`。
 |---|---|---|
 | `index-url` | `http://mirrors.aliyun.com/pypi/simple/` | 使用阿里云 PyPI 镜像加速下载 |
 | `trusted-host` | `mirrors.aliyun.com` | 信任 HTTP 镜像源（非 HTTPS） |
+
+---
+
+### `npm/.npmrc`
+
+npm 包管理器的镜像源与代理配置。部署至 `~/.npmrc`。
+
+| 字段 | 值 | 说明 |
+|---|---|---|
+| `registry` | `https://registry.npmmirror.com` | 使用淘宝 npm 镜像源加速下载 |
+| `prefix` | `/usr/local` | 全局安装包的路径 |
+| `proxy` | `http://proxy.xxx.com:8080` | HTTP 代理（需替换为实际代理地址） |
+| `https-proxy` | `http://proxy.xxx.com:8080` | HTTPS 代理（需替换为实际代理地址） |
+| `cache` | `/tmp/npm/cache` | npm 缓存目录 |
+
+**等效命令：** `.npmrc` 中的配置项均可通过 `npm config set` 命令直接设置：
+
+| 命令 | 对应字段 |
+|---|---|
+| `npm config set registry https://registry.npmmirror.com` | `registry` |
+| `npm config set prefix /usr/local` | `prefix` |
+| `npm config set proxy http://proxy.xxx.com:8080` | `proxy` |
+| `npm config set https-proxy http://proxy.xxx.com:8080` | `https-proxy` |
+| `npm config set cache /tmp/npm/cache` | `cache` |
+
+执行 `npm config set` 后会自动写入 `~/.npmrc`，也可直接编辑该文件。通过 `npm config list` 查看当前生效的全部配置。
 
 ---
 
@@ -138,7 +166,7 @@ Hermes Agent 主配置文件。部署至 `~/.hermes/config.yaml`。
 
 Hermes Agent API 密钥文件。部署至 `~/.hermes/.env`。
 
-> **Warning**: 包含敏感凭据，请勿上传至公开仓库。
+> **警告**：包含敏感凭据，请勿上传至公开仓库。
 
 | 变量 | 用途 |
 |---|---|
@@ -194,7 +222,7 @@ Hermes Agent 常用命令速查手册。
 
 ---
 
-## Deploy
+## 部署
 
 ```bash
 # Vim
@@ -209,6 +237,9 @@ cp opencode/AGENTS.md ~/.config/opencode/
 # Pip
 mkdir -p ~/.config/pip
 cp pip/pip.conf ~/.config/pip/
+
+# npm
+cp npm/.npmrc ~/.npmrc
 
 # Hermes
 mkdir -p ~/.hermes
