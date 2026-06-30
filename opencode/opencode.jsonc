@@ -20,6 +20,34 @@
           "name": "claude-opus-4-7-thinking"
         }
       }
+    },
+    "bailian-payg": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Alibaba Cloud Model Studio",
+      "options": {
+        "apiKey": "xxx",
+        "baseURL": "https://dashscope.aliyuncs.com/apps/anthropic/v1"
+      },
+      "models": {
+        "glm-5.2": {
+          "name": "GLM-5.2",
+          "options": {
+            "thinking": {
+              "budgetTokens": 8192,
+              "type": "enabled"
+            }
+          }
+        },
+        "qwen3.7-max": {
+          "name": "Qwen3.7 Max",
+          "options": {
+            "thinking": {
+              "budgetTokens": 8192,
+              "type": "enabled"
+            }
+          }
+        }
+      }
     }
   }
 }
