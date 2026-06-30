@@ -122,6 +122,38 @@ npm 包管理器的镜像源与代理配置。部署至 `~/.npmrc`。
 
 ---
 
+### `uv/uv.toml`
+
+uv 包管理器的镜像源配置。部署至 `~/.config/uv/uv.toml`。
+
+| 字段 | 值 | 说明 |
+|---|---|---|
+| `python-install-mirror` | `https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone` | CPython 解释器下载镜像（`uv python install` 使用） |
+| `[[index]]` (tsinghua) | `https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple` | 清华 PyPI 镜像源 |
+| `[[index]]` (ustc) | `https://mirrors.ustc.edu.cn/pypi/simple` | 中科大 PyPI 镜像源，`default = true`（默认索引） |
+
+---
+
+### `uv/commands.md`
+
+uv 命令行工具常用命令速查手册。
+
+涵盖 9 大类命令：
+
+| 分类 | 内容 |
+|---|---|
+| 安装 | 安装命令、更新、PATH 配置 |
+| 环境变量 | `UV_CACHE_DIR`、`UV_TOOL_DIR`、`UV_PYTHON_INSTALL_DIR` 等配置说明 |
+| Python 管理 | `uv python install/list/pin/uninstall` |
+| 项目管理 | `uv init/add/remove/sync/lock/run/build` |
+| 工具管理 | `uv tool install/list/upgrade/uninstall/run` |
+| 虚拟环境 | `uv venv` 创建与激活 |
+| pip 兼容接口 | `uv pip install/uninstall/list/freeze/compile/sync` |
+| 缓存与清理 | `uv cache dir/clean/prune` |
+| 常用工作流 | 新项目初始化、requirements.txt 迁移、全局工具管理 |
+
+---
+
 ### `hermes/config.yaml`
 
 Hermes Agent 主配置文件。部署至 `~/.hermes/config.yaml`。
@@ -240,6 +272,10 @@ cp pip/pip.conf ~/.config/pip/
 
 # npm
 cp npm/.npmrc ~/.npmrc
+
+# uv
+mkdir -p ~/.config/uv
+cp uv/uv.toml ~/.config/uv/
 
 # Hermes
 mkdir -p ~/.hermes

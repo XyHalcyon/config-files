@@ -1,0 +1,15 @@
+# 1. CPython 代理配置（必须在 [[index]] 上方）
+# 用于 uv python install 下载 Python 解释器时的代理转发，只能采用加速代理
+python-install-mirror = "https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone"
+
+# 2. PyPI 源配置（可以配置多个）
+# 清华 PyPI 镜像地址
+[[index]]
+name = "tsinghua"  # 自定义镜像名称
+url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
+
+# 中科大 PyPI 镜像地址
+[[index]]
+name = "ustc"
+url = "https://mirrors.ustc.edu.cn/pypi/simple" 
+default = true  # 标记为最低优先级，并禁用官方 PyPI 索引
