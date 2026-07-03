@@ -1,0 +1,22 @@
+[safe]
+	directory = /xxx/xxx
+[user]
+	name = ZhangXin
+	email = zhangxin_data@163.com
+[core]
+	editor = vim
+	autocrlf = input
+[init]
+	defaultBranch = main
+[push]
+	default = simple
+[pull]
+	ff = only
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
+[merge]
+	conflictstyle = zdiff3
+[alias]
+	lg = log --oneline --graph --all --decorate

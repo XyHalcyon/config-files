@@ -254,6 +254,66 @@ Hermes Agent 常用命令速查手册。
 
 ---
 
+### `git/.gitconfig`
+
+Git 全局配置文件。部署至 `~/.gitconfig`。
+
+**配置项：**
+
+| Section | 字段 | 值 | 说明 |
+|---|---|---|---|
+| `safe` | `directory` | `/xxx/xxx` | 信任目录 |
+| `user` | `name` / `email` | — | 提交者身份 |
+| `core` | `editor` | `vim` | 默认编辑器 |
+| `core` | `autocrlf` | `input` | 提交时 CRLF→LF，检出时不转换（Linux/Mac） |
+| `init` | `defaultBranch` | `main` | 新仓库默认分支名 |
+| `push` | `default` | `simple` | 只推送当前分支 |
+| `pull` | `ff` | `only` | 仅快进合并，有分叉时报错 |
+| `fetch` | `prune` | `true` | fetch 时自动清理已删除的远程分支引用 |
+| `rebase` | `autoStash` | `true` | rebase 前自动 stash |
+| `merge` | `conflictstyle` | `zdiff3` | 冲突显示 base 版本，三方对比 |
+| `alias` | `lg` | `log --oneline --graph --all --decorate` | 可视化提交历史 |
+
+**等效命令：**
+
+| 命令 | 对应字段 |
+|---|---|
+| `git config --global core.editor "vim"` | `core.editor` |
+| `git config --global core.autocrlf input` | `core.autocrlf` |
+| `git config --global init.defaultBranch main` | `init.defaultBranch` |
+| `git config --global push.default simple` | `push.default` |
+| `git config --global pull.ff only` | `pull.ff` |
+| `git config --global fetch.prune true` | `fetch.prune` |
+| `git config --global rebase.autoStash true` | `rebase.autoStash` |
+| `git config --global merge.conflictstyle zdiff3` | `merge.conflictstyle` |
+| `git config --global alias.lg "log --oneline --graph --all --decorate"` | `alias.lg` |
+
+---
+
+### `git/commands.md`
+
+Git 常用命令速查手册。
+
+涵盖 13 大类命令：
+
+| 分类 | 内容 |
+|---|---|
+| 配置管理 | `git config` 全局/仓库配置 |
+| 仓库操作 | `init`、`clone`、`remote` |
+| 工作区与暂存区 | `add`、`restore`、`rm`、`reset` |
+| 提交 | `commit`、`log`、`diff`、`blame` |
+| 分支管理 | `branch`、`switch`、`checkout`、`merge`、`cherry-pick`、`stash` |
+| 变基 | `rebase`、交互式 rebase 操作说明 |
+| 远程协作 | `fetch`、`pull`、`push` |
+| 回退与撤销 | `reset`、`revert`、`reflog`（含安全性标注） |
+| 标签 | `tag` 轻量/附注标签管理 |
+| 子模块 | `submodule` 添加/初始化/更新 |
+| 大文件 | `lfs` 追踪与管理 |
+| 二分查找 | `bisect` 定位引入 bug 的提交 |
+| 工作流场景 | hotfix、squash、同步 fork、清理分支、找回误删 |
+
+---
+
 ## 部署
 
 ```bash
@@ -269,6 +329,9 @@ cp opencode/AGENTS.md ~/.config/opencode/
 # Pip
 mkdir -p ~/.config/pip
 cp pip/pip.conf ~/.config/pip/
+
+# Git
+cp git/.gitconfig ~/.gitconfig
 
 # npm
 cp npm/.npmrc ~/.npmrc
