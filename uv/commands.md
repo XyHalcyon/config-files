@@ -4,14 +4,14 @@
 
 | 命令 | 说明 |
 |---|---|
-| `curl -LsSf https://astral.sh/uv/install.sh \| env UV_INSTALL_DIR="/usr/local/uv" sh` | 安装 uv 到 `/usr/local/uv` |
+| `curl -LsSf https://astral.sh/uv/install.sh \| env UV_INSTALL_DIR="/usr/local/uv/bin" sh` | 安装 uv 到 `/usr/local/uv/bin` |
 | `uv self update` | 更新 uv 到最新版本 |
 | `uv version` | 查看当前版本 |
 
-安装后需将 `/usr/local/uv` 加入 `PATH`：
+安装后需将 `/usr/local/uv/bin` 加入 `PATH`：
 
 ```bash
-export PATH="/usr/local/uv:$PATH"
+export PATH="/usr/local/uv/bin:$PATH"
 ```
 
 ---
@@ -216,7 +216,8 @@ uv tool upgrade --all
 ## 关键路径速查
 
 ```
-/usr/local/uv/                    uv 安装目录
+/usr/local/uv/bin/                uv 可执行文件目录
+/usr/local/uv/python/              Python 解释器安装目录
 ~/.config/uv/uv.toml              配置文件
 $UV_CACHE_DIR                     包缓存目录
 $UV_TOOL_DIR                      全局工具安装目录

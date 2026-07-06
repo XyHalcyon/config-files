@@ -414,7 +414,7 @@ Docker 镜像构建文件，基于 Ubuntu 26.04，部署至项目根目录。
 |---|---|
 | 1. 系统包 | vim、git、curl、wget、nodejs、npm、locales |
 | 2. Locale | `en_US.UTF-8` + `zh_CN.UTF-8` |
-| 3. uv + Python | 安装 uv 到 `/usr/local/uv`，通过 `uv python install 3.12` 安装 Python |
+| 3. uv + Python | 安装 uv 到 `/usr/local/uv/bin`，通过 `uv python install 3.12` 安装 Python |
 | 4. 目录结构 | 创建 `~/.config/*` 和 `~/.hermes/skills` |
 | 5. 配置复制 | 7 套工具配置 → 对应路径（见下方部署章节） |
 | 6. OpenCode | `npm install -g @opencode/opencode` |

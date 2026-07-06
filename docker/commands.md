@@ -240,7 +240,7 @@ docker/.dockerignore           构建上下文排除规则
 **本仓库容器内关键路径：**
 
 ```
-/usr/local/uv/                 uv 安装目录
+/usr/local/uv/bin/             uv 可执行文件
 /usr/local/uv/python/          Python 解释器（uv 托管）
 /usr/local/bin/                Python/工具可执行文件软链
 /usr/local/lib/node_modules/   npm 全局包

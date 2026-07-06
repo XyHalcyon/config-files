@@ -33,8 +33,10 @@ ENV LANG=en_US.UTF-8 \
 # ---------------------------------------------------------------------------
 # 3. uv + Python (per uv/commands.md §1 安装 + §2 环境变量)
 # ---------------------------------------------------------------------------
-# Install uv to /usr/local/uv (system-wide, all users)
-RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/local/uv" sh
+# Install uv binary to /usr/local/uv/bin (system-wide, all users)
+RUN mkdir -p /usr/local/uv/bin && \
+    curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-gnu.tar.gz | \
+    tar xz -C /usr/local/uv/bin --strip-components=1
 ENV PATH="/usr/local/uv/bin:${PATH}"
 
 # uv environment variables (controls install directories & link mode)
