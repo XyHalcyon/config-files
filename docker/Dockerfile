@@ -15,10 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     ca-certificates \
-    # Python ecosystem
-    python3 \
-    python3-pip \
-    python3-venv \
     # Node.js ecosystem (Ubuntu 26.04 default, typically v22+)
     nodejs \
     npm \
@@ -35,10 +31,21 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 # ---------------------------------------------------------------------------
-# 3. uv (Python package manager) — official installer
+# 3. uv + Python (per uv/commands.md §1 安装 + §2 环境变量)
 # ---------------------------------------------------------------------------
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.local/bin:${PATH}"
+# Install uv to /usr/local/uv (system-wide, all users)
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/local/uv" sh
+ENV PATH="/usr/local/uv/bin:${PATH}"
+
+# uv environment variables (controls install directories & link mode)
+ENV UV_PYTHON_INSTALL_DIR="/usr/local/uv/python" \
+    UV_PYTHON_BIN_DIR="/usr/local/bin" \
+    UV_TOOL_DIR="/usr/local/uv/tools" \
+    UV_TOOL_BIN_DIR="/usr/local/bin" \
+    UV_LINK_MODE="copy"
+
+# Install Python via uv (globally visible via /usr/local/bin symlinks)
+RUN uv python install 3.12
 
 # ---------------------------------------------------------------------------
 # 4. Directory structure
@@ -60,6 +67,7 @@ COPY vim/.vimrc /root/.vimrc
 COPY git/.gitconfig /root/.gitconfig
 
 # Pip (Aliyun mirror for Chinese mainland)
+# NOTE: pip is NOT installed (Python managed by uv); config kept for reference only
 COPY pip/pip.conf /root/.config/pip/pip.conf
 
 # npm (npmmirror registry for Chinese mainland)
@@ -97,7 +105,7 @@ COPY hermes/skills/               /root/.hermes/skills/
 #    Requires API keys in hermes/.env (currently placeholders)
 #    Uncomment to enable:
 # ---------------------------------------------------------------------------
-# RUN pip install --break-system-packages hermes-agent
+# RUN uv pip install --system hermes-agent
 
 # ---------------------------------------------------------------------------
 # 8. Environment
