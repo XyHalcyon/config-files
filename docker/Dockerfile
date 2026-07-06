@@ -71,9 +71,9 @@ COPY git/.gitconfig /root/.gitconfig
 COPY pip/pip.conf /root/.config/pip/pip.conf
 
 # npm (npmmirror registry for Chinese mainland)
-# WARNING: proxy/https-proxy entries are placeholders (proxy.xxx.com:8080).
-# Remove or replace them in npm/.npmrc before build, or npm install will hang.
 COPY npm/.npmrc /root/.npmrc
+# Comment out placeholder proxy entries to avoid npm install hanging
+RUN sed -i '/^proxy=/s/^/# /; /^https-proxy=/s/^/# /' /root/.npmrc
 
 # uv (USTC default index + Tsinghua fallback + NJU Python mirror)
 COPY uv/uv.toml /root/.config/uv/uv.toml
