@@ -418,7 +418,7 @@ Docker 镜像构建文件，基于 Ubuntu 26.04，部署至项目根目录。
 | 4. 目录结构 | 创建 `~/.config/*` 和 `~/.hermes/skills` |
 | 5. 配置复制 | 7 套工具配置 → 对应路径（见下方部署章节） |
 | 6. OpenCode | `npm install -g opencode-ai@latest` |
-| 7. Hermes Agent | `uv pip install --system hermes-agent` |
+| 7. Hermes Agent | `uv tool install hermes-agent` |
 | 8. 环境变量 | `EDITOR=vim`、`PYTHONUNBUFFERED=1` 等 |
 
 **环境变量：**

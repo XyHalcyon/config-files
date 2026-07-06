@@ -105,7 +105,7 @@ RUN npm install -g opencode-ai@latest
 # 7. Hermes Agent (AI agent platform, Python)
 #    Requires API keys in hermes/.env (currently placeholders)
 # ---------------------------------------------------------------------------
-RUN uv pip install --system hermes-agent
+RUN uv tool install hermes-agent
 
 # ---------------------------------------------------------------------------
 # 8. Environment
