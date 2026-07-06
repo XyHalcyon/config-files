@@ -94,18 +94,16 @@ COPY hermes/skills/               /root/.hermes/skills/
 #   git/.gitattributes → copy to <repo>/.gitattributes
 
 # ---------------------------------------------------------------------------
-# 6. Optional: Install OpenCode (AI coding assistant, Node.js)
+# 6. OpenCode (AI coding assistant, Node.js)
 #    Requires API keys in opencode/opencode.jsonc (currently placeholders "xxx")
-#    Uncomment to enable:
 # ---------------------------------------------------------------------------
-# RUN npm install -g @opencode/opencode
+RUN npm install -g @opencode/opencode
 
 # ---------------------------------------------------------------------------
-# 7. Optional: Install Hermes Agent (AI agent platform, Python)
+# 7. Hermes Agent (AI agent platform, Python)
 #    Requires API keys in hermes/.env (currently placeholders)
-#    Uncomment to enable:
 # ---------------------------------------------------------------------------
-# RUN uv pip install --system hermes-agent
+RUN uv pip install --system hermes-agent
 
 # ---------------------------------------------------------------------------
 # 8. Environment
