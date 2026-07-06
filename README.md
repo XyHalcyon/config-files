@@ -400,45 +400,6 @@ Git 忽略规则模板。部署至各仓库根目录 `.gitignore`，按需裁剪
 
 ---
 
-## 部署
-
-```bash
-# Vim
-cp vim/.vimrc ~/.vimrc
-
-# OpenCode
-mkdir -p ~/.config/opencode
-cp opencode/opencode.jsonc ~/.config/opencode/
-cp opencode/oh-my-openagent.json ~/.config/opencode/
-cp opencode/AGENTS.md ~/.config/opencode/
-cp opencode/commands.md ~/.config/opencode/
-
-# Pip
-mkdir -p ~/.config/pip
-cp pip/pip.conf ~/.config/pip/
-
-# Git
-cp git/.gitconfig ~/.gitconfig
-# .gitignore 和 .gitattributes 部署至各仓库根目录，非 home 目录
-# cp git/.gitignore <repo>/.gitignore
-# cp git/.gitattributes <repo>/.gitattributes
-
-# npm
-cp npm/.npmrc ~/.npmrc
-
-# uv
-mkdir -p ~/.config/uv
-cp uv/uv.toml ~/.config/uv/
-
-# Hermes
-mkdir -p ~/.hermes
-cp hermes/config.yaml ~/.hermes/
-cp hermes/.env ~/.hermes/
-cp -r hermes/skills ~/.hermes/
-```
-
----
-
 ## Docker
 
 提供 `docker/Dockerfile` 和 `docker/.dockerignore`，用于快速构建包含全部工具与配置的开发环境容器。
@@ -505,3 +466,42 @@ docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache dev-env:lates
 - **API 密钥**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥
 - **npm 代理**：`npm/.npmrc` 中的 `proxy`/`https-proxy` 为占位符（`proxy.xxx.com:8080`），不需要代理时请删除这两行，否则 `npm install` 会卡住
 - **pip**：系统未安装 pip（Python 由 uv 管理），`pip/pip.conf` 仅作为参考保留
+
+---
+
+## 部署
+
+```bash
+# Vim
+cp vim/.vimrc ~/.vimrc
+
+# OpenCode
+mkdir -p ~/.config/opencode
+cp opencode/opencode.jsonc ~/.config/opencode/
+cp opencode/oh-my-openagent.json ~/.config/opencode/
+cp opencode/AGENTS.md ~/.config/opencode/
+cp opencode/commands.md ~/.config/opencode/
+
+# Pip
+mkdir -p ~/.config/pip
+cp pip/pip.conf ~/.config/pip/
+
+# Git
+cp git/.gitconfig ~/.gitconfig
+# .gitignore 和 .gitattributes 部署至各仓库根目录，非 home 目录
+# cp git/.gitignore <repo>/.gitignore
+# cp git/.gitattributes <repo>/.gitattributes
+
+# npm
+cp npm/.npmrc ~/.npmrc
+
+# uv
+mkdir -p ~/.config/uv
+cp uv/uv.toml ~/.config/uv/
+
+# Hermes
+mkdir -p ~/.hermes
+cp hermes/config.yaml ~/.hermes/
+cp hermes/.env ~/.hermes/
+cp -r hermes/skills ~/.hermes/
+```
