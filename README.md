@@ -331,30 +331,6 @@ Git 全局配置文件。部署至 `~/.gitconfig`。
 
 ---
 
-### `git/commands.md`
-
-Git 常用命令速查手册。
-
-涵盖 13 大类命令：
-
-| 分类 | 内容 |
-|---|---|
-| 配置管理 | `git config` 全局/仓库配置 |
-| 仓库操作 | `init`、`clone`、`remote` |
-| 工作区与暂存区 | `add`、`restore`、`rm`、`reset` |
-| 提交 | `commit`、`log`、`diff`、`blame` |
-| 分支管理 | `branch`、`switch`、`checkout`、`merge`、`cherry-pick`、`stash` |
-| 变基 | `rebase`、交互式 rebase 操作说明 |
-| 远程协作 | `fetch`、`pull`、`push` |
-| 回退与撤销 | `reset`、`revert`、`reflog`（含安全性标注） |
-| 标签 | `tag` 轻量/附注标签管理 |
-| 子模块 | `submodule` 添加/初始化/更新 |
-| 大文件 | `lfs` 追踪与管理 |
-| 二分查找 | `bisect` 定位引入 bug 的提交 |
-| 工作流场景 | hotfix、squash、同步 fork、清理分支、找回误删 |
-
----
-
 ### `git/.gitattributes`
 
 Git 行尾规范化配置文件。部署至各仓库根目录 `.gitattributes`，配合 `git/.gitconfig` 中的 `core.autocrlf = input` 使用。
@@ -397,6 +373,30 @@ Git 忽略规则模板。部署至各仓库根目录 `.gitignore`，按需裁剪
 | 临时文件 | `*.log`、`*.tmp`、`*.bak`、`*.cache`、`*.pid` |
 | Docker | `.dockerignore` |
 | Terraform | `.terraform/`、`*.tfstate`、`*.tfvars`、`*.tfplan` |
+
+---
+
+### `git/commands.md`
+
+Git 常用命令速查手册。
+
+涵盖 13 大类命令：
+
+| 分类 | 内容 |
+|---|---|
+| 配置管理 | `git config` 全局/仓库配置 |
+| 仓库操作 | `init`、`clone`、`remote` |
+| 工作区与暂存区 | `add`、`restore`、`rm`、`reset` |
+| 提交 | `commit`、`log`、`diff`、`blame` |
+| 分支管理 | `branch`、`switch`、`checkout`、`merge`、`cherry-pick`、`stash` |
+| 变基 | `rebase`、交互式 rebase 操作说明 |
+| 远程协作 | `fetch`、`pull`、`push` |
+| 回退与撤销 | `reset`、`revert`、`reflog`（含安全性标注） |
+| 标签 | `tag` 轻量/附注标签管理 |
+| 子模块 | `submodule` 添加/初始化/更新 |
+| 大文件 | `lfs` 追踪与管理 |
+| 二分查找 | `bisect` 定位引入 bug 的提交 |
+| 工作流场景 | hotfix、squash、同步 fork、清理分支、找回误删 |
 
 ---
 
@@ -451,6 +451,20 @@ docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-
 
 ---
 
+### `docker/.dockerignore`
+
+Docker 构建上下文排除规则，加速构建并减小上下文体积。
+
+| 排除项 | 原因 |
+|---|---|
+| `.git/` | Git 仓库数据 |
+| `.omo/` `.codegraph/` | OpenCode 内部数据 |
+| `docker/` | Dockerfile 自身 |
+| `.DS_Store` `Thumbs.db` | OS 元数据文件 |
+| `*.swp` `*.swo` `*~` | vim 临时文件 |
+
+---
+
 ### `docker/commands.md`
 
 Docker 常用命令速查手册。
@@ -468,20 +482,6 @@ Docker 常用命令速查手册。
 | 数据卷与网络 | `volume` 和 `network` 子命令 |
 | 清理 | `prune/df` 系列，磁盘空间管理 |
 | 常用工作流 | 本仓库使用、多服务开发、镜像发布、故障排查、磁盘清理 |
-
----
-
-### `docker/.dockerignore`
-
-Docker 构建上下文排除规则，加速构建并减小上下文体积。
-
-| 排除项 | 原因 |
-|---|---|
-| `.git/` | Git 仓库数据 |
-| `.omo/` `.codegraph/` | OpenCode 内部数据 |
-| `docker/` | Dockerfile 自身 |
-| `.DS_Store` `Thumbs.db` | OS 元数据文件 |
-| `*.swp` `*.swo` `*~` | vim 临时文件 |
 
 ---
 
