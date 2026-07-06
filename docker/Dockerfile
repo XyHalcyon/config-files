@@ -1,0 +1,112 @@
+# =============================================================================
+# Dev environment with personal dotfiles & configs
+# Build: docker build -t config-files-dev -f docker/Dockerfile .
+# Run:   docker run -it --rm config-files-dev
+# =============================================================================
+FROM ubuntu:26.04
+
+# ---------------------------------------------------------------------------
+# 1. System packages
+# ---------------------------------------------------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Core tools
+    vim \
+    git \
+    curl \
+    wget \
+    ca-certificates \
+    # Python ecosystem
+    python3 \
+    python3-pip \
+    python3-venv \
+    # Node.js ecosystem (Ubuntu 26.04 default, typically v22+)
+    nodejs \
+    npm \
+    # Locale support (for vim CJK settings)
+    locales \
+    # Cleanup
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------------------------
+# 2. Locale (required by vim config: encoding=utf-8, langmenu=zh_CN.UTF-8)
+# ---------------------------------------------------------------------------
+RUN locale-gen en_US.UTF-8 zh_CN.UTF-8
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# ---------------------------------------------------------------------------
+# 3. uv (Python package manager) — official installer
+# ---------------------------------------------------------------------------
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:${PATH}"
+
+# ---------------------------------------------------------------------------
+# 4. Directory structure
+# ---------------------------------------------------------------------------
+RUN mkdir -p \
+    /root/.config/opencode \
+    /root/.config/pip \
+    /root/.config/uv \
+    /root/.hermes/skills
+
+# ---------------------------------------------------------------------------
+# 5. Copy config files (build context = repo root)
+# ---------------------------------------------------------------------------
+
+# Vim
+COPY vim/.vimrc /root/.vimrc
+
+# Git
+COPY git/.gitconfig /root/.gitconfig
+
+# Pip (Aliyun mirror for Chinese mainland)
+COPY pip/pip.conf /root/.config/pip/pip.conf
+
+# npm (npmmirror registry for Chinese mainland)
+# WARNING: proxy/https-proxy entries are placeholders (proxy.xxx.com:8080).
+# Remove or replace them in npm/.npmrc before build, or npm install will hang.
+COPY npm/.npmrc /root/.npmrc
+
+# uv (USTC default index + Tsinghua fallback + NJU Python mirror)
+COPY uv/uv.toml /root/.config/uv/uv.toml
+
+# OpenCode (AI coding assistant configs)
+COPY opencode/opencode.jsonc      /root/.config/opencode/opencode.jsonc
+COPY opencode/oh-my-openagent.json /root/.config/opencode/oh-my-openagent.json
+COPY opencode/AGENTS.md           /root/.config/opencode/AGENTS.md
+COPY opencode/commands.md         /root/.config/opencode/commands.md
+
+# Hermes (AI agent config + skills)
+COPY hermes/config.yaml           /root/.hermes/config.yaml
+COPY hermes/.env                  /root/.hermes/.env
+COPY hermes/skills/               /root/.hermes/skills/
+
+# Optional repo templates (not copied to home; use per-repo)
+#   git/.gitignore     → copy to <repo>/.gitignore
+#   git/.gitattributes → copy to <repo>/.gitattributes
+
+# ---------------------------------------------------------------------------
+# 6. Optional: Install OpenCode (AI coding assistant, Node.js)
+#    Requires API keys in opencode/opencode.jsonc (currently placeholders "xxx")
+#    Uncomment to enable:
+# ---------------------------------------------------------------------------
+# RUN npm install -g @opencode/opencode
+
+# ---------------------------------------------------------------------------
+# 7. Optional: Install Hermes Agent (AI agent platform, Python)
+#    Requires API keys in hermes/.env (currently placeholders)
+#    Uncomment to enable:
+# ---------------------------------------------------------------------------
+# RUN pip install --break-system-packages hermes-agent
+
+# ---------------------------------------------------------------------------
+# 8. Environment
+# ---------------------------------------------------------------------------
+ENV EDITOR=vim \
+    VISUAL=vim \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /workspace
+
+# Default shell
+CMD ["/bin/bash"]

@@ -1,0 +1,19 @@
+# Git
+.git/
+
+# OpenCode internal
+.omo/
+.codegraph/
+
+# Workspace
+docker/
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor junk
+*.swp
+*.swo
+*~

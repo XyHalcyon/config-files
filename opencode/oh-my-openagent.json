@@ -4,49 +4,49 @@
     "sisyphus": {
       "model": "deepseek/deepseek-v4-pro",
       "fallback_models": [
-        "codiz/claude-opus-4-7"
+        "alibaba-cn/qwen-3.7-max"
       ]
     },
     "hephaestus": {
-      "model": "codiz/claude-opus-4-7-thinking",
+      "model": "deepseek/deepseek-v4-pro",
       "fallback_models": [
-        "codiz/claude-opus-4-7"
+        "codiz/claude-opus-4-8"
       ]
     },
     "prometheus": {
-      "model": "codiz/claude-opus-4-7-thinking",
-      "fallback_models": [
-        "codiz/claude-opus-4-7"
-      ]
-    },
-    "atlas": {
-      "model": "alibaba-cn/qwen-3.7-max",
+      "model": "codiz/claude-opus-4-8",
       "fallback_models": [
         "deepseek/deepseek-v4-pro"
       ]
     },
     "oracle": {
-      "model": "codiz/claude-opus-4-7-thinking",
+      "model": "codiz/claude-opus-4-8-thinking",
       "fallback_models": [
-        "codiz/claude-opus-4-7"
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "atlas": {
+      "model": "alibaba-cn/qwen-3.7-max",
+      "fallback_models": [
+        "bailian-payg/glm-5.2"
       ]
     },
     "metis": {
-      "model": "alibaba-cn/qwen-3.7-max",
+      "model": "bailian-payg/glm-5.2",
       "fallback_models": [
-        "deepseek/deepseek-v4-pro"
+        "alibaba-cn/qwen-3.7-max"
       ]
     },
     "momus": {
       "model": "alibaba-cn/qwen-3.7-max",
       "fallback_models": [
-        "deepseek/deepseek-v4-pro"
+        "bailian-payg/glm-5.2"
       ]
     },
     "multimodal-looker": {
-      "model": "codiz/claude-opus-4-7",
+      "model": "codiz/claude-opus-4-8",
       "fallback_models": [
-        "codiz/claude-opus-4-7-thinking"
+        "deepseek/deepseek-v4-pro"
       ]
     },
     "librarian": {
@@ -62,47 +62,47 @@
       ]
     },
     "sisyphus-junior": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "alibaba-cn/qwen-3.7-max",
       "fallback_models": [
-        "alibaba-cn/qwen-3.7-max"
+        "deepseek/deepseek-v4-pro"
       ]
     }
   },
   "categories": {
     "ultrabrain": {
-      "model": "codiz/claude-opus-4-7-thinking",
+      "model": "codiz/claude-opus-4-8-thinking",
       "fallback_models": [
-        "codiz/claude-opus-4-7"
+        "codiz/claude-opus-4-8"
       ]
     },
     "artistry": {
-      "model": "codiz/claude-opus-4-7",
-      "fallback_models": [
-        "alibaba-cn/qwen-3.7-max"
-      ]
-    },
-    "deep": {
-      "model": "codiz/claude-opus-4-7",
-      "fallback_models": [
-        "codiz/claude-opus-4-7-thinking"
-      ]
-    },
-    "visual-engineering": {
-      "model": "codiz/claude-opus-4-7",
-      "fallback_models": [
-        "codiz/claude-opus-4-7-thinking"
-      ]
-    },
-    "unspecified-high": {
       "model": "alibaba-cn/qwen-3.7-max",
       "fallback_models": [
         "deepseek/deepseek-v4-pro"
       ]
     },
-    "writing": {
-      "model": "codiz/claude-opus-4-7",
+    "deep": {
+      "model": "codiz/claude-opus-4-8",
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro"
+      ]
+    },
+    "visual-engineering": {
+      "model": "deepseek/deepseek-v4-pro",
+      "fallback_models": [
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "unspecified-high": {
+      "model": "deepseek/deepseek-v4-pro",
       "fallback_models": [
         "alibaba-cn/qwen-3.7-max"
+      ]
+    },
+    "writing": {
+      "model": "alibaba-cn/qwen-3.7-max",
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro"
       ]
     },
     "unspecified-low": {

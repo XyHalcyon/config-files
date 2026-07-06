@@ -29,7 +29,7 @@ Vim 编辑器配置。部署至 `~/.vimrc`。
 OpenCode 主配置文件。部署至 `~/.config/opencode/opencode.jsonc`。
 
 - **Provider**：Codiz（Anthropic 兼容 API，基于 `@ai-sdk/anthropic`），地址 `https://codiz.dev/v1`
-- **Models**（Codiz）：`claude-opus-4-7` 和 `claude-opus-4-7-thinking`
+- **Models**（Codiz）：`claude-opus-4-7`、`claude-opus-4-7-thinking`、`claude-opus-4-8`、`claude-opus-4-8-thinking`
 - **Provider**：bailian-payg（阿里云百炼 Model Studio，Anthropic 兼容 API，基于 `@ai-sdk/anthropic`），地址 `https://dashscope.aliyuncs.com/apps/anthropic/v1`
 - **Models**（bailian-payg）：`glm-5.2`（GLM-5.2）和 `qwen3.7-max`（Qwen3.7 Max），均启用 thinking 模式（budgetTokens=8192）
 - **Plugin**：`oh-my-openagent`，用于代理编排
@@ -45,24 +45,31 @@ Sisyphus 编排系统的代理与分类模型分配。部署至 `~/.config/openc
 
 **Agents** — 各代理的主模型与回退模型分配：
 
-| Agent | Primary Model | 角色 |
-|---|---|---|
-| `sisyphus` | `deepseek/deepseek-v4-pro` | 主编排器 |
-| `hephaestus` | `codiz/claude-opus-4-7-thinking` | 构建器 |
-| `prometheus` | `codiz/claude-opus-4-7-thinking` | 规划器 |
-| `oracle` | `codiz/claude-opus-4-7-thinking` | 高智商推理顾问 |
-| `explore` / `librarian` | `deepseek/deepseek-v4-flash` | 上下文 / 参考搜索 |
-| `metis` / `momus` / `atlas` | `alibaba-cn/qwen-3.7-max` | 规划 / 审查 |
+| Agent | Primary Model | Fallback Model | 角色 |
+|---|---|---|---|
+| `sisyphus` | `deepseek/deepseek-v4-pro` | `alibaba-cn/qwen-3.7-max` | 主编排器 |
+| `hephaestus` | `deepseek/deepseek-v4-pro` | `codiz/claude-opus-4-8` | 构建器 |
+| `prometheus` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 规划器 |
+| `oracle` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 高智商推理顾问 |
+| `atlas` | `alibaba-cn/qwen-3.7-max` | `bailian-payg/glm-5.2` | 研究索引 |
+| `metis` | `bailian-payg/glm-5.2` | `alibaba-cn/qwen-3.7-max` | 预规划顾问 |
+| `momus` | `alibaba-cn/qwen-3.7-max` | `bailian-payg/glm-5.2` | 计划审查 |
+| `multimodal-looker` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 视觉分析 |
+| `explore` / `librarian` | `deepseek/deepseek-v4-flash` | — | 上下文 / 参考搜索 |
+| `sisyphus-junior` | `alibaba-cn/qwen-3.7-max` | `deepseek/deepseek-v4-pro` | 任务执行器 |
 
 **Categories** — 任务类型到模型的映射：
 
-| Category | Primary Model | 用途 |
-|---|---|---|
-| `ultrabrain` | `codiz/claude-opus-4-7-thinking` | 复杂逻辑 / 架构 |
-| `deep` | `codiz/claude-opus-4-7` | 自主研究 + 实现 |
-| `visual-engineering` | `codiz/claude-opus-4-7` | 前端 / UI / 样式 |
-| `quick` | `deepseek/deepseek-v4-flash` | 简单单文件修改 |
-| `writing` | `codiz/claude-opus-4-7` | 文档 / 写作 |
+| Category | Primary Model | Fallback Model | 用途 |
+|---|---|---|---|
+| `ultrabrain` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 复杂逻辑 / 架构 |
+| `artistry` | `alibaba-cn/qwen-3.7-max` | `deepseek/deepseek-v4-pro` | 创意方案 |
+| `deep` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 自主研究 + 实现 |
+| `visual-engineering` | `deepseek/deepseek-v4-pro` | `codiz/claude-opus-4-8` | 前端 / UI / 样式 |
+| `unspecified-high` | `deepseek/deepseek-v4-pro` | `alibaba-cn/qwen-3.7-max` | 未分类高复杂度 |
+| `writing` | `alibaba-cn/qwen-3.7-max` | `deepseek/deepseek-v4-pro` | 文档 / 写作 |
+| `unspecified-low` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` | 未分类低复杂度 |
+| `quick` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` | 简单单文件修改 |
 
 ---
 
@@ -82,6 +89,28 @@ LLM 编码助手行为指南。部署至 `~/.config/opencode/AGENTS.md`。
 > **注意**：这些指南偏向谨慎而非速度。对于简单任务，自行判断。
 >
 > **来源**：改编自 [multica-ai/andrej-karpathy-skills/CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md)。
+
+---
+
+### `opencode/commands.md`
+
+OpenCode 常用命令速查手册。部署至 `~/.config/opencode/commands.md`。
+
+涵盖 11 大类命令：
+
+| 分类 | 内容 |
+|---|---|
+| 基础操作 | `opencode` 启动、`run` 单次执行、Server 模式、全局选项 |
+| 会话管理 | `session list/delete`、`export/import`、`stats` 统计 |
+| Provider 与模型 | `providers list/login/logout`、`models` 列出可用模型 |
+| MCP 服务器 | `mcp list/add/auth/logout/debug` |
+| Agent 管理 | `agent list/create`、`debug agent` 查看详情 |
+| Plugin 插件 | `plugin <module>` 安装并更新配置 |
+| GitHub 集成 | `github install/run`、`pr <number>` 拉取 PR |
+| 诊断与调试 | `debug config/paths/lsp/skill/startup`、升级卸载 |
+| Slash 命令 | 会话内 `/frontend`、`/git-master`、`/debugging` 等 20+ 命令 |
+| 触发词速查 | `commit`→`/git-master`、`security review`→`/security-review` 等自动触发 |
+| 常用工作流 | 新功能开发（规划→执行→审查→清理）、调试修复、前端页面的完整流程 |
 
 ---
 
@@ -370,6 +399,7 @@ mkdir -p ~/.config/opencode
 cp opencode/opencode.jsonc ~/.config/opencode/
 cp opencode/oh-my-openagent.json ~/.config/opencode/
 cp opencode/AGENTS.md ~/.config/opencode/
+cp opencode/commands.md ~/.config/opencode/
 
 # Pip
 mkdir -p ~/.config/pip

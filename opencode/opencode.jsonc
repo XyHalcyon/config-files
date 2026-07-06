@@ -18,6 +18,12 @@
         },
         "claude-opus-4-7-thinking": {
           "name": "claude-opus-4-7-thinking"
+        },
+        "claude-opus-4-8": {
+          "name": "claude-opus-4-8"
+        },
+        "claude-opus-4-8-thinking": {
+          "name": "claude-opus-4-8-thinking"
         }
       }
     },
