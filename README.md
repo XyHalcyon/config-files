@@ -438,13 +438,16 @@ Docker 镜像构建文件，基于 Ubuntu 26.04，部署至项目根目录。
 
 ```bash
 # 在仓库根目录构建
-docker build -t config-files-dev -f docker/Dockerfile .
+docker build -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .
 
-# 交互式进入容器
-docker run -it --rm config-files-dev
+# 交互式进入容器（退出后自动删除）
+docker run -it --rm ubuntu26.04-custom:v0.1
+
+# 交互式进入容器（保留容器，退出后可用 docker start 重新进入）
+docker run -it ubuntu26.04-custom:v0.1
 
 # 挂载本地工作目录 + 保留包缓存
-docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-dev
+docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache ubuntu26.04-custom:v0.1
 ```
 
 > **注意**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥。`npm/.npmrc` 中的 `proxy`/`https-proxy` 为占位符（`proxy.xxx.com:8080`），不需要代理时请删除这两行，否则 `npm install` 会卡住。系统未安装 pip（Python 由 uv 管理）。

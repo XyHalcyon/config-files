@@ -6,8 +6,8 @@
 
 | 命令 | 说明 |
 |---|---|
-| `docker build -t config-files-dev -f docker/Dockerfile .` | 使用仓库 `docker/Dockerfile` 构建镜像（在仓库根目录执行） |
-| `docker build --no-cache -t config-files-dev -f docker/Dockerfile .` | 强制重新构建，忽略缓存 |
+| `docker build -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .` | 使用仓库 `docker/Dockerfile` 构建镜像（在仓库根目录执行） |
+| `docker build --no-cache -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .` | 强制重新构建，忽略缓存 |
 
 ---
 
@@ -29,15 +29,15 @@
 
 | 命令 | 说明 | 示例 |
 |---|---|---|
-| `docker run -it <image>` | 交互式启动，分配 TTY | `docker run -it config-files-dev` |
-| `docker run -it --rm <image>` | 运行，退出后自动删除容器 | `docker run -it --rm config-files-dev` |
+| `docker run -it <image>` | 交互式启动，分配 TTY | `docker run -it ubuntu26.04-custom:v0.1` |
+| `docker run -it --rm <image>` | 运行，退出后自动删除容器 | `docker run -it --rm ubuntu26.04-custom:v0.1` |
 | `docker run -d <image>` | 后台运行 | `docker run -d --name myapp nginx` |
 | `docker run -p 8080:80 <image>` | 端口映射（宿主机:容器） | `docker run -p 3000:3000 myapp` |
-| `docker run -v $(pwd):/workspace <image>` | 挂载当前目录到容器 | `docker run -it -v $(pwd):/workspace config-files-dev` |
-| `docker run -v <name>:/path <image>` | 挂载命名数据卷 | `docker run -v dev-cache:/root/.cache config-files-dev` |
+| `docker run -v $(pwd):/workspace <image>` | 挂载当前目录到容器 | `docker run -it -v $(pwd):/workspace ubuntu26.04-custom:v0.1` |
+| `docker run -v <name>:/path <image>` | 挂载命名数据卷 | `docker run -v dev-cache:/root/.cache ubuntu26.04-custom:v0.1` |
 | `docker run -e KEY=VALUE <image>` | 设置环境变量 | `docker run -e NODE_ENV=production myapp` |
-| `docker run --env-file .env <image>` | 从文件加载环境变量 | `docker run --env-file .env config-files-dev` |
-| `docker run --name <name> <image>` | 指定容器名称 | `docker run --name dev-env config-files-dev` |
+| `docker run --env-file .env <image>` | 从文件加载环境变量 | `docker run --env-file .env ubuntu26.04-custom:v0.1` |
+| `docker run --name <name> <image>` | 指定容器名称 | `docker run --name dev-env ubuntu26.04-custom:v0.1` |
 | `docker run --memory="512m" <image>` | 限制内存使用 | `docker run --memory=512m myapp` |
 | `docker run --cpus="2" <image>` | 限制 CPU 使用 | `docker run --cpus=2 myapp` |
 
@@ -45,10 +45,10 @@
 
 ```bash
 # 基础运行
-docker run -it --rm config-files-dev
+docker run -it --rm ubuntu26.04-custom:v0.1
 
 # 挂载当前目录 + 保留包缓存
-docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-dev
+docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache ubuntu26.04-custom:v0.1
 ```
 
 ---
@@ -60,12 +60,12 @@ docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-
 | `docker images` | 列出本地镜像 | `docker images` |
 | `docker pull <image>` | 拉取镜像 | `docker pull ubuntu:26.04` |
 | `docker push <image>` | 推送镜像到仓库 | `docker push myapp:latest` |
-| `docker tag <src> <dst>` | 为镜像打标签 | `docker tag config-files-dev myrepo/config-files:v1` |
-| `docker rmi <image>` | 删除镜像 | `docker rmi config-files-dev` |
+| `docker tag <src> <dst>` | 为镜像打标签 | `docker tag ubuntu26.04-custom:v0.1 myrepo/config-files:v1` |
+| `docker rmi <image>` | 删除镜像 | `docker rmi ubuntu26.04-custom:v0.1` |
 | `docker rmi $(docker images -q)` | 删除所有镜像 | `docker rmi $(docker images -q)` |
-| `docker image history <image>` | 查看镜像构建历史（层） | `docker image history config-files-dev` |
-| `docker image inspect <image>` | 查看镜像详细信息 | `docker image inspect config-files-dev` |
-| `docker save -o file.tar <image>` | 导出镜像为 tar 文件 | `docker save -o dev-env.tar config-files-dev` |
+| `docker image history <image>` | 查看镜像构建历史（层） | `docker image history ubuntu26.04-custom:v0.1` |
+| `docker image inspect <image>` | 查看镜像详细信息 | `docker image inspect ubuntu26.04-custom:v0.1` |
+| `docker save -o file.tar <image>` | 导出镜像为 tar 文件 | `docker save -o dev-env.tar ubuntu26.04-custom:v0.1` |
 | `docker load -i file.tar` | 从 tar 文件导入镜像 | `docker load -i dev-env.tar` |
 
 ---
@@ -162,14 +162,14 @@ docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-
 
 ```bash
 # 1. 构建镜像
-docker build -t config-files-dev -f docker/Dockerfile .
+docker build -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .
 
 # 2. 交互式使用
-docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-dev
+docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache ubuntu26.04-custom:v0.1
 
 # 3. 日常更新（拉取最新配置后重新构建）
 git pull
-docker build -t config-files-dev -f docker/Dockerfile .
+docker build -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .
 ```
 
 ### 多服务本地开发
@@ -192,8 +192,8 @@ docker compose down
 
 ```bash
 # 1. 构建并打标签
-docker build -t config-files-dev -f docker/Dockerfile .
-docker tag config-files-dev myrepo/config-files:v1.0
+docker build -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .
+docker tag ubuntu26.04-custom:v0.1 myrepo/config-files:v1.0
 
 # 2. 推送
 docker push myrepo/config-files:v1.0

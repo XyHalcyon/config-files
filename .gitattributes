@@ -1,0 +1,91 @@
+# 默认：所有文本文件入库自动转 LF
+* text=auto
+
+# Python
+*.py text
+*.ipynb text
+*.pyx text
+*.pyi text
+*.pyw text
+
+# Markdown
+*.md text
+*.rst text
+
+*.txt text
+
+# JSON
+*.json text
+*.json5 text
+*.jsonc text
+
+# JavaScript
+*.js text
+*.mjs text
+*.cjs text
+*.ts text
+*.tsx text
+
+# CSS
+*.css text
+*.scss text
+*.less text
+
+# HTML
+*.html text
+*.htm text
+
+# Shell
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+
+# YAML / Config
+*.yaml text
+*.yml text
+*.toml text
+*.ini text
+*.cfg text
+*.conf text
+*.env text
+*.properties text
+
+# Docker
+*.dockerfile text
+Dockerfile text
+
+# SQL
+*.sql text
+
+# Git 自身文件
+*.gitignore text
+*.gitattributes text
+
+# Lock files
+*.lock text eol=lf
+
+# 二进制文件不转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.bz2 binary
+*.7z binary
+*.rar binary
+*.exe binary
+*.dll binary
+*.so binary
+*.pyd binary
+*.npy binary
+*.dat binary
+*.bin binary
+*.db binary
+*.sqlite binary
+*.woff2 binary
+*.woff binary

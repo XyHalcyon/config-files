@@ -1,7 +1,7 @@
 # =============================================================================
 # Dev environment with personal dotfiles & configs
-# Build: docker build -t config-files-dev -f docker/Dockerfile .
-# Run:   docker run -it --rm config-files-dev
+# Build: docker build -t ubuntu26.04-custom:v0.1 -f docker/Dockerfile .
+# Run:   docker run -it --rm ubuntu26.04-custom:v0.1
 # =============================================================================
 FROM ubuntu:26.04
 
