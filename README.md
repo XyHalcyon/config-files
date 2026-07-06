@@ -314,6 +314,51 @@ Git 常用命令速查手册。
 
 ---
 
+### `git/.gitattributes`
+
+Git 行尾规范化配置文件。部署至各仓库根目录 `.gitattributes`，配合 `git/.gitconfig` 中的 `core.autocrlf = input` 使用。
+
+**核心规则：**
+
+| 规则 | 覆盖文件类型 |
+|---|---|
+| `* text=auto` | 默认所有文本文件入库自动转 LF |
+| `text` | Python（`.py/.ipynb/.pyx/.pyi/.pyw`）、Markdown、JSON、JS/TS、CSS/SCSS/LESS、HTML |
+| `text eol=lf` | Shell（`.sh/.bash/.zsh`）、Lock 文件（`*.lock`） |
+| `binary` | 图片（`.png/.jpg/.gif/.ico/.svg`）、压缩包（`.zip/.tar/.gz`）、二进制（`.exe/.dll/.so`） |
+
+**工作原理：**
+
+- `git add` 入库时：CRLF 自动转为 LF 存入仓库（`text` 规则）
+- `git checkout` 出库时：由于 `core.autocrlf = input`，不再转回 CRLF，工作区保持 LF
+- `git diff` 不再因行尾差异产生假变更
+
+> **注意**：`.sh` 和 `*.lock` 文件使用 `eol=lf` 强制 LF，即使 `core.autocrlf` 设为 `true` 也不会在 checkout 时转为 CRLF。
+
+---
+
+### `git/.gitignore`
+
+Git 忽略规则模板。部署至各仓库根目录 `.gitignore`，按需裁剪。
+
+**覆盖类别：**
+
+| 类别 | 忽略内容 |
+|---|---|
+| Python | 缓存（`__pycache__/`）、编译产物（`*.pyc/.pyo`）、构建输出（`dist/`、`build/`）、虚拟环境（`venv/`、`.env`） |
+| 包管理器 | `.tox/`、`.nox/`、PDM（`.pdm-python/` 等）、`__pypackages__/` |
+| 测试 | `.pytest_cache/`、`.coverage`、`htmlcov/`、`.mypy_cache/`、`.ruff_cache/` |
+| Jupyter | `.ipynb_checkpoints/` |
+| ML 模型 | PyTorch（`.pt/.pth/.ckpt`）、TensorFlow（`.tfrecord`）、ONNX（`.onnx`）、HuggingFace（`.safetensors/.bin`）、序列化（`.pkl/.pickle`） |
+| Node.js | `node_modules/`、`npm-debug.log`、`yarn-error.log`、`pnpm-store/` |
+| IDE / 编辑器 | `.idea/`、`.vscode/`、`*.swp`、`*.swo`、`.history`、`.devcontainer/` |
+| OS | `.DS_Store`、`Thumbs.db`、`Desktop.ini`、`$RECYCLE.BIN/` |
+| 临时文件 | `*.log`、`*.tmp`、`*.bak`、`*.cache`、`*.pid` |
+| Docker | `.dockerignore` |
+| Terraform | `.terraform/`、`*.tfstate`、`*.tfvars`、`*.tfplan` |
+
+---
+
 ## 部署
 
 ```bash
@@ -332,6 +377,9 @@ cp pip/pip.conf ~/.config/pip/
 
 # Git
 cp git/.gitconfig ~/.gitconfig
+# .gitignore 和 .gitattributes 部署至各仓库根目录，非 home 目录
+# cp git/.gitignore <repo>/.gitignore
+# cp git/.gitattributes <repo>/.gitattributes
 
 # npm
 cp npm/.npmrc ~/.npmrc
