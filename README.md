@@ -424,3 +424,72 @@ cp hermes/config.yaml ~/.hermes/
 cp hermes/.env ~/.hermes/
 cp -r hermes/skills ~/.hermes/
 ```
+
+---
+
+## Docker
+
+提供 `docker/Dockerfile` 和 `docker/.dockerignore`，用于快速构建包含全部工具与配置的开发环境容器。
+
+### 构建
+
+```bash
+# 在仓库根目录执行（构建上下文 = 当前目录）
+docker build -t config-files-dev -f docker/Dockerfile .
+```
+
+### 运行
+
+```bash
+# 交互式进入容器
+docker run -it --rm config-files-dev
+
+# 挂载本地工作目录
+docker run -it --rm -v $(pwd):/workspace config-files-dev
+
+# 挂载本地工作目录 + 保留容器内安装的包缓存
+docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache dev-env:latest
+```
+
+### 镜像内已安装的工具
+
+| 工具 | 安装方式 | 说明 |
+|---|---|---|
+| vim | apt | 编辑器 |
+| git | apt | 版本控制 |
+| curl / wget | apt | HTTP 客户端 |
+| nodejs / npm | apt | Node.js 运行时与包管理器 |
+| uv + Python 3.12 | curl 安装 → uv python install | Python 生态由 uv 管理，替代系统级 python3/pip |
+| OpenCode | npm install -g | AI 编码助手（需配置 API Key） |
+| Hermes Agent | uv pip install --system | AI Agent 平台（需配置 API Key） |
+
+### 环境变量
+
+| 变量 | 值 | 说明 |
+|---|---|---|
+| `PATH` | `/usr/local/uv/bin` 前置 | uv 命令全局可见 |
+| `UV_PYTHON_INSTALL_DIR` | `/usr/local/uv/python` | Python 解释器安装目录 |
+| `UV_PYTHON_BIN_DIR` | `/usr/local/bin` | Python 可执行文件软链目录 |
+| `UV_TOOL_DIR` | `/usr/local/uv/tools` | uv 工具安装目录 |
+| `UV_TOOL_BIN_DIR` | `/usr/local/bin` | uv 工具可执行文件软链目录 |
+| `UV_LINK_MODE` | `copy` | 包安装使用 copy 模式（容器兼容性最优） |
+| `EDITOR` / `VISUAL` | `vim` | 默认编辑器 |
+| `PYTHONUNBUFFERED` | `1` | Python stdout 不缓冲 |
+
+### .dockerignore
+
+排除构建上下文中不需要 COPY 到镜像的文件，加速构建并减小上下文体积：
+
+| 排除项 | 原因 |
+|---|---|
+| `.git/` | Git 仓库数据 |
+| `.omo/` `.codegraph/` | OpenCode 内部数据 |
+| `docker/` | Dockerfile 自身 |
+| `.DS_Store` `Thumbs.db` | OS 元数据文件 |
+| `*.swp` `*.swo` `*~` | vim 临时文件 |
+
+### 注意事项
+
+- **API 密钥**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥
+- **npm 代理**：`npm/.npmrc` 中的 `proxy`/`https-proxy` 为占位符（`proxy.xxx.com:8080`），不需要代理时请删除这两行，否则 `npm install` 会卡住
+- **pip**：系统未安装 pip（Python 由 uv 管理），`pip/pip.conf` 仅作为参考保留
