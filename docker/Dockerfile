@@ -99,7 +99,7 @@ COPY hermes/skills/               /root/.hermes/skills/
 # 6. OpenCode (AI coding assistant, Node.js)
 #    Requires API keys in opencode/opencode.jsonc (currently placeholders "xxx")
 # ---------------------------------------------------------------------------
-RUN npm install -g @opencode/opencode
+RUN npm install -g opencode-ai@latest
 
 # ---------------------------------------------------------------------------
 # 7. Hermes Agent (AI agent platform, Python)
