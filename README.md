@@ -402,41 +402,26 @@ Git 忽略规则模板。部署至各仓库根目录 `.gitignore`，按需裁剪
 
 ## Docker
 
-提供 `docker/Dockerfile` 和 `docker/.dockerignore`，用于快速构建包含全部工具与配置的开发环境容器。
+提供 `docker/Dockerfile`、`docker/commands.md` 和 `docker/.dockerignore`，用于快速构建包含全部工具与配置的开发环境容器。
 
-### 构建
+### `docker/Dockerfile`
 
-```bash
-# 在仓库根目录执行（构建上下文 = 当前目录）
-docker build -t config-files-dev -f docker/Dockerfile .
-```
+Docker 镜像构建文件，基于 Ubuntu 26.04，部署至项目根目录。
 
-### 运行
+**构建阶段（8 步）：**
 
-```bash
-# 交互式进入容器
-docker run -it --rm config-files-dev
+| 阶段 | 内容 |
+|---|---|
+| 1. 系统包 | vim、git、curl、wget、nodejs、npm、locales |
+| 2. Locale | `en_US.UTF-8` + `zh_CN.UTF-8` |
+| 3. uv + Python | 安装 uv 到 `/usr/local/uv`，通过 `uv python install 3.12` 安装 Python |
+| 4. 目录结构 | 创建 `~/.config/*` 和 `~/.hermes/skills` |
+| 5. 配置复制 | 7 套工具配置 → 对应路径（见下方部署章节） |
+| 6. OpenCode | `npm install -g @opencode/opencode` |
+| 7. Hermes Agent | `uv pip install --system hermes-agent` |
+| 8. 环境变量 | `EDITOR=vim`、`PYTHONUNBUFFERED=1` 等 |
 
-# 挂载本地工作目录
-docker run -it --rm -v $(pwd):/workspace config-files-dev
-
-# 挂载本地工作目录 + 保留容器内安装的包缓存
-docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache dev-env:latest
-```
-
-### 镜像内已安装的工具
-
-| 工具 | 安装方式 | 说明 |
-|---|---|---|
-| vim | apt | 编辑器 |
-| git | apt | 版本控制 |
-| curl / wget | apt | HTTP 客户端 |
-| nodejs / npm | apt | Node.js 运行时与包管理器 |
-| uv + Python 3.12 | curl 安装 → uv python install | Python 生态由 uv 管理，替代系统级 python3/pip |
-| OpenCode | npm install -g | AI 编码助手（需配置 API Key） |
-| Hermes Agent | uv pip install --system | AI Agent 平台（需配置 API Key） |
-
-### 环境变量
+**环境变量：**
 
 | 变量 | 值 | 说明 |
 |---|---|---|
@@ -449,9 +434,46 @@ docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache dev-env:lates
 | `EDITOR` / `VISUAL` | `vim` | 默认编辑器 |
 | `PYTHONUNBUFFERED` | `1` | Python stdout 不缓冲 |
 
-### .dockerignore
+**构建与运行：**
 
-排除构建上下文中不需要 COPY 到镜像的文件，加速构建并减小上下文体积：
+```bash
+# 在仓库根目录构建
+docker build -t config-files-dev -f docker/Dockerfile .
+
+# 交互式进入容器
+docker run -it --rm config-files-dev
+
+# 挂载本地工作目录 + 保留包缓存
+docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache config-files-dev
+```
+
+> **注意**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥。`npm/.npmrc` 中的 `proxy`/`https-proxy` 为占位符（`proxy.xxx.com:8080`），不需要代理时请删除这两行，否则 `npm install` 会卡住。系统未安装 pip（Python 由 uv 管理）。
+
+---
+
+### `docker/commands.md`
+
+Docker 常用命令速查手册。
+
+涵盖 9 大类命令：
+
+| 分类 | 内容 |
+|---|---|
+| 安装 | 本仓库 `docker/Dockerfile` 构建命令 |
+| 构建 | `docker build` 常用参数（平台、缓存、构建参数） |
+| 运行 | `docker run` 参数（端口、挂载、环境变量、资源限制） |
+| 镜像管理 | `pull/push/tag/rmi/save/load` |
+| 容器管理 | `ps/exec/logs/cp/inspect/stats` |
+| Docker Compose | `up/down/logs/exec/restart` |
+| 数据卷与网络 | `volume` 和 `network` 子命令 |
+| 清理 | `prune/df` 系列，磁盘空间管理 |
+| 常用工作流 | 本仓库使用、多服务开发、镜像发布、故障排查、磁盘清理 |
+
+---
+
+### `docker/.dockerignore`
+
+Docker 构建上下文排除规则，加速构建并减小上下文体积。
 
 | 排除项 | 原因 |
 |---|---|
@@ -460,12 +482,6 @@ docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache dev-env:lates
 | `docker/` | Dockerfile 自身 |
 | `.DS_Store` `Thumbs.db` | OS 元数据文件 |
 | `*.swp` `*.swo` `*~` | vim 临时文件 |
-
-### 注意事项
-
-- **API 密钥**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥
-- **npm 代理**：`npm/.npmrc` 中的 `proxy`/`https-proxy` 为占位符（`proxy.xxx.com:8080`），不需要代理时请删除这两行，否则 `npm install` 会卡住
-- **pip**：系统未安装 pip（Python 由 uv 管理），`pip/pip.conf` 仅作为参考保留
 
 ---
 
