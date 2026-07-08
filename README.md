@@ -166,8 +166,7 @@ uv 包管理器的镜像源配置。部署至 `~/.config/uv/uv.toml`。
 | 字段 | 值 | 说明 |
 |---|---|---|
 | `python-install-mirror` | `https://mirrors.nju.edu.cn/github-release/astral-sh/python-build-standalone` | CPython 解释器下载镜像（`uv python install` 使用） |
-| `[[index]]` (tsinghua) | `https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple` | 清华 PyPI 镜像源 |
-| `[[index]]` (ustc) | `https://mirrors.ustc.edu.cn/pypi/simple` | 中科大 PyPI 镜像源，`default = true`（默认索引） |
+| `[[index]]` (aliyun) | `http://mirrors.aliyun.com/pypi/simple/` | 阿里云 PyPI 镜像源 |
 
 ---
 
