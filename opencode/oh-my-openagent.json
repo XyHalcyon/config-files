@@ -2,9 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
   "agents": {
     "sisyphus": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "bailian-payg/qwen3.7-max",
       "fallback_models": [
-        "alibaba-cn/qwen-3.7-max"
+        "deepseek/deepseek-v4-pro"
       ]
     },
     "hephaestus": {

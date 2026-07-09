@@ -49,7 +49,7 @@ Sisyphus 编排系统的代理与分类模型分配。部署至 `~/.config/openc
 
 | Agent | Primary Model | Fallback Model | 角色 |
 |---|---|---|---|
-| `sisyphus` | `deepseek/deepseek-v4-pro` | `alibaba-cn/qwen-3.7-max` | 主编排器 |
+| `sisyphus` | `bailian-payg/qwen3.7-max` | `deepseek/deepseek-v4-pro` | 主编排器 |
 | `hephaestus` | `deepseek/deepseek-v4-pro` | `codiz/claude-opus-4-8` | 构建器 |
 | `prometheus` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 规划器 |
 | `oracle` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 高智商推理顾问 |
