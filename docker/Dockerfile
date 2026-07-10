@@ -31,7 +31,7 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 # ---------------------------------------------------------------------------
-# 3. uv + Python (per uv/commands.md §1 安装 + §2 环境变量)
+# 3. uv (per uv/commands.md §1 安装 + §2 环境变量)
 # ---------------------------------------------------------------------------
 # Install uv binary to /usr/local/uv/bin (system-wide, all users)
 RUN mkdir -p /usr/local/uv/bin && \
@@ -45,9 +45,6 @@ ENV UV_PYTHON_INSTALL_DIR="/usr/local/uv/python" \
     UV_TOOL_DIR="/usr/local/uv/tools" \
     UV_TOOL_BIN_DIR="/usr/local/bin" \
     UV_LINK_MODE="copy"
-
-# Install Python via uv (globally visible via /usr/local/bin symlinks)
-RUN uv python install 3.12
 
 # ---------------------------------------------------------------------------
 # 4. Directory structure
@@ -79,6 +76,10 @@ RUN sed -i '/^proxy=/s/^/# /; /^https-proxy=/s/^/# /' /root/.npmrc
 
 # uv (USTC default index + Tsinghua fallback + NJU Python mirror)
 COPY uv/uv.toml /root/.config/uv/uv.toml
+
+# Install Python via uv (globally visible via /usr/local/bin symlinks)
+# MUST be after COPY uv/uv.toml so python-install-mirror takes effect
+RUN uv python install 3.10
 
 # OpenCode (AI coding assistant configs)
 COPY opencode/opencode.jsonc      /root/.config/opencode/opencode.jsonc
