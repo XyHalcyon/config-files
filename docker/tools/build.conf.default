@@ -1,0 +1,150 @@
+# =============================================================================
+# Docker 构建配置文件
+#
+# 格式: key=value (等号两侧空格自动忽略)
+# 注释: # 开头的行, 以及行内 # 之后的内容
+# 空行: 自动忽略
+# 注意: 值不支持引号包裹, 直接写裸值
+#
+# 所有配置项均有默认值, 空文件/空配置也可正常生成 Dockerfile
+# =============================================================================
+#
+# 配置规则:
+#
+#   1. 镜像配置
+#      image.base        基础镜像, 格式: 名称:标签
+#                        默认: ubuntu:26.04
+#                        支持:
+#                          - Ubuntu 系 (x86-64): ubuntu:26.04, ubuntu:22.04 等
+#                          - vllm-ascend (ARM): quay.io/ascend/vllm-ascend:latest 等
+#                            适用于华为昇腾 (Ascend) ARM 架构的 AI 推理环境
+#                        ⚙️ 脚本根据镜像名称自动检测架构 (x86_64 / aarch64),
+#                           匹配规则: 镜像名含 ascend/arm/aarch64 → aarch64, 否则 x86_64
+#                        ⚙️ 脚本根据镜像名称自动检测发行版族, 选择包管理器和 locale 命令:
+#                           - ascend/openeuler/centos/rhel/rocky/alma/fedora → redhat (dnf)
+#                           - ubuntu/debian 及其他 → debian (apt-get)
+#
+#      image.tag         生成镜像的名称和标签, 必须包含冒号分隔
+#                        默认: ubuntu26.04-custom:v0.1
+#
+#   2. 本地化配置
+#      locale.codes      需要生成的 locale 列表, 逗号分隔
+#                        默认: en_US.UTF-8,zh_CN.UTF-8
+#
+#      locale.lang       默认语言环境, 必须在 locale.codes 中
+#                        默认: en_US.UTF-8
+#
+#   3. Python (通过 uv 管理)
+#      python.include    是否安装 Python: yes / no
+#                        默认: yes
+#                        ⚠️ hermes 依赖 python, 若 python.include=no
+#                           则 hermes.include 必须为 no
+#
+#      python.version    Python 版本号, 格式: 主版本.次版本[.补丁]
+#                        默认: 3.10
+#                        可选: 3.8, 3.9, 3.10, 3.11, 3.12, 3.13 等
+#
+#      python.uv_link_mode  uv 包安装模式
+#                        默认: copy (Docker 容器兼容性最优)
+#                        可选: copy, hardlink, symlink, clone, local
+#
+#   4. Vim
+#      vim.include       是否安装 vim 并复制 .vimrc: yes / no
+#                        默认: yes
+#
+#   5. Git
+#      git.include       是否安装 git 并复制 .gitconfig: yes / no
+#                        默认: yes
+#
+#   6. Node.js / npm
+#      nodejs.include    是否安装 Node.js + npm: yes / no
+#                        默认: yes
+#                        ⚠️ opencode 依赖 nodejs (通过 npm 安装)
+#
+#      npm.copy_config   是否复制 .npmrc 配置: yes / no
+#                        默认: yes (仅在 nodejs.include=yes 时生效)
+#
+#      npm.proxy         是否启用 npm 代理: yes / no
+#                        默认: no (仅在 nodejs.include=yes 时生效)
+#
+#      npm.proxy_http    HTTP 代理地址, npm.proxy=yes 时必须设置
+#                        格式: http://host:port
+#                        默认: (空)
+#
+#      npm.proxy_https   HTTPS 代理地址, npm.proxy=yes 时必须设置
+#                        格式: http://host:port
+#                        默认: (空)
+#
+#      npm.prefix        npm 全局安装路径前缀
+#                        默认: /usr/local
+#
+#   7. AI 工具
+#      opencode.include  是否安装 OpenCode AI 编程助手: yes / no
+#                        默认: yes
+#                        ⚠️ 依赖 nodejs (npm install -g)
+#
+#      hermes.include    是否安装 Hermes Agent: yes / no
+#                        默认: yes
+#                        ⚠️ 依赖 python (uv tool install)
+#
+#   8. 扩展配置
+#      extra.apt_packages  额外的 APT 系统包, 逗号分隔
+#                        默认: (空)
+#                        示例: gcc,g++,make,tree,htop
+#
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# 镜像配置
+# ---------------------------------------------------------------------------
+image.base=ubuntu:26.04
+image.tag=ubuntu26.04-custom:v0.1
+
+# ---------------------------------------------------------------------------
+# 本地化配置
+# ---------------------------------------------------------------------------
+locale.codes=en_US.UTF-8,zh_CN.UTF-8
+locale.lang=en_US.UTF-8
+
+# ---------------------------------------------------------------------------
+# Python (uv 管理)
+# ---------------------------------------------------------------------------
+python.include=yes
+python.version=3.10
+python.uv_link_mode=copy
+
+# ---------------------------------------------------------------------------
+# Vim
+# ---------------------------------------------------------------------------
+
+vim.include=yes
+
+# ---------------------------------------------------------------------------
+# Git
+# ---------------------------------------------------------------------------
+git.include=yes
+
+# ---------------------------------------------------------------------------
+# Node.js / npm
+# ---------------------------------------------------------------------------
+nodejs.include=yes
+npm.copy_config=yes
+
+# npm 代理 (国内无代理环境保持 no)
+npm.proxy=no
+# npm.proxy_http=http://proxy.company.com:8080
+# npm.proxy_https=http://proxy.company.com:8080
+
+npm.prefix=/usr/local
+
+# ---------------------------------------------------------------------------
+# AI 工具
+# ---------------------------------------------------------------------------
+opencode.include=yes
+hermes.include=yes
+
+# ---------------------------------------------------------------------------
+# 扩展配置
+# ---------------------------------------------------------------------------
+# 额外的 APT 系统包 (逗号分隔, 默认空)
+# extra.apt_packages=gcc,g++,make,tree,htop
