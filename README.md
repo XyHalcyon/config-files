@@ -139,8 +139,8 @@ npm 包管理器的镜像源与代理配置。部署至 `~/.npmrc`。
 |---|---|---|
 | `registry` | `https://registry.npmmirror.com` | 使用淘宝 npm 镜像源加速下载 |
 | `prefix` | `/usr/local` | 全局安装包的路径 |
-| `proxy` | `http://proxy.xxx.com:8080` | HTTP 代理（需替换为实际代理地址） |
-| `https-proxy` | `http://proxy.xxx.com:8080` | HTTPS 代理（需替换为实际代理地址） |
+| `proxy` | `http://proxy.xxx.com:8080` | HTTP 代理（默认注释，需替换为实际代理地址后取消注释） |
+| `https-proxy` | `http://proxy.xxx.com:8080` | HTTPS 代理（默认注释，需替换为实际代理地址后取消注释） |
 | `cache` | `/tmp/npm/cache` | npm 缓存目录 |
 
 **等效命令：** `.npmrc` 中的配置项均可通过 `npm config set` 命令直接设置：
@@ -449,7 +449,7 @@ docker run -it ubuntu26.04-custom:v0.1
 docker run -it --rm -v $(pwd):/workspace -v dev-cache:/root/.cache ubuntu26.04-custom:v0.1
 ```
 
-> **注意**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥。`npm/.npmrc` 中的 `proxy`/`https-proxy` 为占位符（`proxy.xxx.com:8080`），不需要代理时请删除这两行，否则 `npm install` 会卡住。系统未安装 pip（Python 由 uv 管理）。
+> **注意**：`opencode/opencode.jsonc` 和 `hermes/.env` 中的 API Key 为占位符（`xxx`），构建前需替换为真实密钥。`npm/.npmrc` 中的 `proxy`/`https-proxy` 默认注释，如需代理请在容器内取消注释并替换为实际地址。系统未安装 pip（Python 由 uv 管理）。
 
 ---
 

@@ -93,23 +93,10 @@ COPY git/.gitconfig /root/.gitconfig
 "
     fi
 
-    if [[ "$(cfg nodejs.include)" == "yes" && "$(cfg npm.copy_config)" == "yes" ]]; then
+    if [[ "$(cfg nodejs.include)" == "yes" ]]; then
         _out+="# npm (npmmirror registry)
 COPY npm/.npmrc /root/.npmrc
-"
-        if [[ "$(cfg npm.proxy)" == "yes" ]]; then
-            _out+="# Enable proxy entries with configured values
-RUN sed -i \\
-    -e 's|^# proxy=.*|proxy=$(cfg npm.proxy_http)|' \\
-    -e 's|^# https-proxy=.*|https-proxy=$(cfg npm.proxy_https)|' \\
-    /root/.npmrc
-"
-        else
-            _out+="# Comment out placeholder proxy entries
-RUN sed -i '/^proxy=/s/^/# /; /^https-proxy=/s/^/# /' /root/.npmrc
-"
-        fi
-        _out+="
+
 "
     fi
 

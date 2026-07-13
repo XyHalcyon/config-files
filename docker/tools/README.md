@@ -67,10 +67,6 @@ docker run -it --rm ubuntu26.04-custom:v0.1
 | `vim.include` | `yes` | `yes`/`no` | 安装 vim 配置 |
 | `git.include` | `yes` | `yes`/`no` | 安装 git 配置 |
 | `nodejs.include` | `yes` | `yes`/`no` | 安装 Node.js |
-| `npm.copy_config` | `yes` | `yes`/`no` | 复制 .npmrc |
-| `npm.proxy` | `no` | `yes`/`no` | 启用 npm 代理 |
-| `npm.proxy_http` | (空) | `http://host:port` | HTTP 代理 |
-| `npm.proxy_https` | (空) | `http://host:port` | HTTPS 代理 |
 | `npm.prefix` | `/usr/local` | 任意路径 | npm 全局路径 |
 | `opencode.include` | `yes` | `yes`/`no` | 安装 OpenCode |
 | `hermes.include` | `yes` | `yes`/`no` | 安装 Hermes |
@@ -126,13 +122,6 @@ python.include=no
 nodejs.include=no
 opencode.include=no
 hermes.include=no
-```
-
-### 代理环境
-```ini
-npm.proxy=yes
-npm.proxy_http=http://proxy.company.com:8080
-npm.proxy_https=http://proxy.company.com:8080
 ```
 
 ## 工具依赖关系
@@ -210,5 +199,5 @@ if [[ "$base" == *"alpine"* || ... ]]; then
 2. **生成文件路径**: 固定输出到 `docker/Dockerfile.generated`，不覆盖手动维护的 `docker/Dockerfile`
 3. **`build.conf.default`**: 是默认值参考文件或模板，自定义请复制为 `build.conf`
 4. **`uv.toml` 顺序**: 生成脚本保证 `uv.toml` 在 `uv python install` 之前复制，让镜像下载走配置
-5. **npm proxy**: `.npmrc` 的 proxy 占位符默认注释。`npm.proxy=yes` 时脚本替换为实际地址
+5. **npm 代理**: `.npmrc` 中的 `proxy` 和 `https-proxy` 默认注释，如需代理请在容器内手动取消注释
 6. **未知发行版**: 默认走 `debian` 分支，生成 apt-get 命令。若基础镜像不是 Debian 系，需新增分支脚本

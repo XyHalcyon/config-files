@@ -68,20 +68,6 @@
 #                        默认: yes
 #                        ⚠️ opencode 依赖 nodejs (通过 npm 安装)
 #
-#      npm.copy_config   是否复制 .npmrc 配置: yes / no
-#                        默认: yes (仅在 nodejs.include=yes 时生效)
-#
-#      npm.proxy         是否启用 npm 代理: yes / no
-#                        默认: no (仅在 nodejs.include=yes 时生效)
-#
-#      npm.proxy_http    HTTP 代理地址, npm.proxy=yes 时必须设置
-#                        格式: http://host:port
-#                        默认: (空)
-#
-#      npm.proxy_https   HTTPS 代理地址, npm.proxy=yes 时必须设置
-#                        格式: http://host:port
-#                        默认: (空)
-#
 #      npm.prefix        npm 全局安装路径前缀
 #                        默认: /usr/local
 #
@@ -137,12 +123,6 @@ git.include=yes
 # Node.js / npm
 # ---------------------------------------------------------------------------
 nodejs.include=yes
-npm.copy_config=yes
-
-# npm 代理 (国内无代理环境保持 no)
-npm.proxy=no
-# npm.proxy_http=http://proxy.company.com:8080
-# npm.proxy_https=http://proxy.company.com:8080
 
 npm.prefix=/usr/local
 

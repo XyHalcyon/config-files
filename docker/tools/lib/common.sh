@@ -21,10 +21,6 @@ declare -A _DEFAULTS=(
     [vim.include]="yes"
     [git.include]="yes"
     [nodejs.include]="yes"
-    [npm.copy_config]="yes"
-    [npm.proxy]="no"
-    [npm.proxy_http]=""
-    [npm.proxy_https]=""
     [npm.prefix]="/usr/local"
     [opencode.include]="yes"
     [hermes.include]="yes"
@@ -166,8 +162,8 @@ validate_conf() {
     # --- yes/no 布尔值校验 ---
     local bool_keys=(
         python.include vim.include git.include
-        nodejs.include npm.copy_config
-        npm.proxy opencode.include hermes.include
+        nodejs.include
+        opencode.include hermes.include
     )
     for k in "${bool_keys[@]}"; do
         local v; v=$(cfg "$k")
@@ -186,27 +182,6 @@ validate_conf() {
             errors=$((errors + 1))
             ;;
     esac
-
-    # --- npm proxy: 启用时校验地址格式 ---
-    if [[ "$(cfg npm.proxy)" == "yes" ]]; then
-        local ph; ph=$(cfg npm.proxy_http)
-        if [[ -z "$ph" ]]; then
-            log_error "npm.proxy=yes 时必须设置 npm.proxy_http"
-            errors=$((errors + 1))
-        elif [[ "$ph" != http://* ]]; then
-            log_error "npm.proxy_http 必须以 http:// 开头, 当前: '$ph'"
-            errors=$((errors + 1))
-        fi
-
-        local ps; ps=$(cfg npm.proxy_https)
-        if [[ -z "$ps" ]]; then
-            log_error "npm.proxy=yes 时必须设置 npm.proxy_https"
-            errors=$((errors + 1))
-        elif [[ "$ps" != http://* ]]; then
-            log_error "npm.proxy_https 必须以 http:// 开头, 当前: '$ps'"
-            errors=$((errors + 1))
-        fi
-    fi
 
     # --- opencode 依赖 nodejs ---
     if [[ "$(cfg opencode.include)" == "yes" && "$(cfg nodejs.include)" == "no" ]]; then
@@ -239,7 +214,6 @@ print_summary() {
     printf '  Node.js:    %s\n' "$(if [[ "$(cfg nodejs.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
     printf '  OpenCode:   %s\n' "$(if [[ "$(cfg opencode.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
     printf '  Hermes:     %s\n' "$(if [[ "$(cfg hermes.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
-    printf '  npm 代理:   %s\n' "$(if [[ "$(cfg npm.proxy)" == "yes" ]]; then printf '%s' "$(cfg npm.proxy_http)"; else printf '未启用'; fi)"
     printf '\n'
     printf '构建命令 (在仓库根目录执行):\n'
     printf '  docker build -t %s -f docker/Dockerfile.generated .\n' "$(cfg image.tag)"
