@@ -6,6 +6,38 @@
 # =============================================================================
 
 # ---------------------------------------------------------------------------
+# Node.js (via NodeSource, 包含 npm)
+# 在 Section 1 (系统包) 之后、Section 2 (Locale) 之前调用
+# NodeSource 的 nodejs 包自带 npm, 无需单独安装
+# ---------------------------------------------------------------------------
+section_nodejs() {
+    local -n _out=$1
+    [[ "$(cfg nodejs.include)" == "yes" ]] || return 0
+
+    local ver; ver=$(cfg nodejs.version)
+    local family; family=$(cfg image.family)
+
+    _out+="# ---------------------------------------------------------------------------
+# Node.js (via NodeSource, includes npm)
+# ---------------------------------------------------------------------------
+"
+
+    if [[ "$family" == "debian" ]]; then
+        _out+="RUN curl -fsSL https://deb.nodesource.com/setup_${ver}.x | bash - \\
+    && apt-get install -y nodejs \\
+    && rm -rf /var/lib/apt/lists/*
+
+"
+    elif [[ "$family" == "redhat" ]]; then
+        _out+="RUN curl -fsSL https://rpm.nodesource.com/setup_${ver}.x | bash - \\
+    && dnf install -y nodejs \\
+    && dnf clean all
+
+"
+    fi
+}
+
+# ---------------------------------------------------------------------------
 # Section 3: uv + Python
 # ---------------------------------------------------------------------------
 section_uv() {

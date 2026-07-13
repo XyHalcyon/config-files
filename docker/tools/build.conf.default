@@ -67,6 +67,11 @@
 #      nodejs.include    是否安装 Node.js + npm: yes / no
 #                        默认: yes
 #                        ⚠️ opencode 依赖 nodejs (通过 npm 安装)
+#                        通过 NodeSource 安装 LTS 版本, 不依赖系统包
+#
+#      nodejs.version    Node.js LTS 大版本号 (NodeSource)
+#                        默认: 22
+#                        可选: 18, 20, 22
 #
 #      npm.prefix        npm 全局安装路径前缀
 #                        默认: /usr/local
@@ -123,6 +128,7 @@ git.include=yes
 # Node.js / npm
 # ---------------------------------------------------------------------------
 nodejs.include=yes
+nodejs.version=22
 npm.prefix=/usr/local
 
 # ---------------------------------------------------------------------------

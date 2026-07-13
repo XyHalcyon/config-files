@@ -67,6 +67,7 @@ docker run -it --rm ubuntu26.04-custom:v0.1
 | `vim.include` | `yes` | `yes`/`no` | 安装 vim 配置 |
 | `git.include` | `yes` | `yes`/`no` | 安装 git 配置 |
 | `nodejs.include` | `yes` | `yes`/`no` | 安装 Node.js |
+| `nodejs.version` | `22` | `18`/`20`/`22` | Node.js LTS 版本 (NodeSource) |
 | `npm.prefix` | `/usr/local` | 任意路径 | npm 全局路径 |
 | `opencode.include` | `yes` | `yes`/`no` | 安装 OpenCode |
 | `hermes.include` | `yes` | `yes`/`no` | 安装 Hermes |

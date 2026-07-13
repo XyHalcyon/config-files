@@ -29,13 +29,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \\
     ca-certificates \\
 "
 
-    if [[ "$(cfg nodejs.include)" == "yes" ]]; then
-        out+="    # Node.js ecosystem
-    nodejs \\
-    npm \\
-"
-    fi
-
     out+="    # Locale support (apt)
     locales \\
 "
@@ -83,6 +76,7 @@ ENV LANG=${lang} \\
     # ================================================================
     # Section 3-8: 通用
     # ================================================================
+    section_nodejs out
     section_uv "$(cfg image.base)" out
     section_dirs out
     section_copy out

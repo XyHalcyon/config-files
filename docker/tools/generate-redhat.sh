@@ -29,13 +29,6 @@ RUN dnf install -y \\
     ca-certificates \\
 "
 
-    if [[ "$(cfg nodejs.include)" == "yes" ]]; then
-        out+="    # Node.js ecosystem
-    nodejs \\
-    npm \\
-"
-    fi
-
     out+="    # Locale support (dnf)
     glibc-common \\
     glibc-locale-archive \\
@@ -96,6 +89,7 @@ RUN "
     # ================================================================
     # Section 3-8: 通用
     # ================================================================
+    section_nodejs out
     section_uv "$(cfg image.base)" out
     section_dirs out
     section_copy out

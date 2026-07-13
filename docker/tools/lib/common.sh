@@ -21,6 +21,7 @@ declare -A _DEFAULTS=(
     [vim.include]="yes"
     [git.include]="yes"
     [nodejs.include]="yes"
+    [nodejs.version]="22"
     [npm.prefix]="/usr/local"
     [opencode.include]="yes"
     [hermes.include]="yes"
@@ -183,6 +184,18 @@ validate_conf() {
             ;;
     esac
 
+    # --- nodejs.version: 必须是 NodeSource LTS 大版本 ---
+    if [[ "$(cfg nodejs.include)" == "yes" ]]; then
+        local njver; njver=$(cfg nodejs.version)
+        case "$njver" in
+            18|20|22) ;;
+            *)
+                log_error "nodejs.version 必须是 NodeSource LTS 版本 (18/20/22), 当前: '$njver'"
+                errors=$((errors + 1))
+                ;;
+        esac
+    fi
+
     # --- opencode 依赖 nodejs ---
     if [[ "$(cfg opencode.include)" == "yes" && "$(cfg nodejs.include)" == "no" ]]; then
         log_error "opencode 需要 nodejs (通过 npm 安装), 但 nodejs.include=no"
@@ -211,7 +224,7 @@ print_summary() {
     printf '  架构:       %s\n' "$(detect_arch)"
     printf '  输出标签:   %s\n' "$(cfg image.tag)"
     printf '  Python:     %s\n' "$(if [[ "$(cfg python.include)" == "yes" ]]; then printf '%s' "$(cfg python.version)"; else printf '不安装'; fi)"
-    printf '  Node.js:    %s\n' "$(if [[ "$(cfg nodejs.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
+    printf '  Node.js:    %s\n' "$(if [[ "$(cfg nodejs.include)" == "yes" ]]; then printf '%s (NodeSource)' "$(cfg nodejs.version)"; else printf '不安装'; fi)"
     printf '  OpenCode:   %s\n' "$(if [[ "$(cfg opencode.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
     printf '  Hermes:     %s\n' "$(if [[ "$(cfg hermes.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
     printf '\n'

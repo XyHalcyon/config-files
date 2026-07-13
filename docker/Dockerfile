@@ -15,12 +15,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     ca-certificates \
-    # Node.js ecosystem (Ubuntu 26.04 default, typically v22+)
-    nodejs \
-    npm \
     # Locale support (for vim CJK settings)
     locales \
     # Cleanup
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------------------------
+# Node.js (via NodeSource, includes npm)
+# ---------------------------------------------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------------------------------------------------------
@@ -71,8 +75,6 @@ COPY pip/pip.conf /root/.config/pip/pip.conf
 
 # npm (npmmirror registry for Chinese mainland)
 COPY npm/.npmrc /root/.npmrc
-# Comment out placeholder proxy entries to avoid npm install hanging
-RUN sed -i '/^proxy=/s/^/# /; /^https-proxy=/s/^/# /' /root/.npmrc
 
 # uv (USTC default index + Tsinghua fallback + NJU Python mirror)
 COPY uv/uv.toml /root/.config/uv/uv.toml

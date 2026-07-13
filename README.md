@@ -407,18 +407,19 @@ Git 常用命令速查手册。
 
 Docker 镜像构建文件，基于 Ubuntu 26.04，部署至项目根目录。
 
-**构建阶段（8 步）：**
+**构建阶段（9 步）：**
 
 | 阶段 | 内容 |
 |---|---|
-| 1. 系统包 | vim、git、curl、wget、nodejs、npm、locales |
-| 2. Locale | `en_US.UTF-8` + `zh_CN.UTF-8` |
-| 3. uv + Python | 安装 uv 到 `/usr/local/uv/bin`，通过 `uv python install 3.12` 安装 Python |
-| 4. 目录结构 | 创建 `~/.config/*` 和 `~/.hermes/skills` |
-| 5. 配置复制 | 7 套工具配置 → 对应路径（见下方部署章节） |
-| 6. OpenCode | `npm install -g opencode-ai@latest` |
-| 7. Hermes Agent | `uv tool install hermes-agent` |
-| 8. 环境变量 | `EDITOR=vim`、`PYTHONUNBUFFERED=1` 等 |
+| 1. 系统包 | vim、git、curl、wget、ca-certificates、locales |
+| 2. Node.js | 通过 NodeSource 安装 LTS v22（含 npm），不依赖系统包版本 |
+| 3. Locale | `en_US.UTF-8` + `zh_CN.UTF-8` |
+| 4. uv + Python | 安装 uv 到 `/usr/local/uv/bin`，通过 `uv python install 3.10` 安装 Python |
+| 5. 目录结构 | 创建 `~/.config/*` 和 `~/.hermes/skills` |
+| 6. 配置复制 | 7 套工具配置 → 对应路径（见下方部署章节） |
+| 7. OpenCode | `npm install -g opencode-ai@latest` |
+| 8. Hermes Agent | `uv tool install hermes-agent` |
+| 9. 环境变量 | `EDITOR=vim`、`PYTHONUNBUFFERED=1` 等 |
 
 **环境变量：**
 
