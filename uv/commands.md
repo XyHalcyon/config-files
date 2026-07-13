@@ -27,7 +27,7 @@ export PATH="/usr/local/uv/bin:$PATH"
 | `UV_PYTHON_INSTALL_DIR` | Python 解释器安装目录（`uv python install` 的输出路径） | `export UV_PYTHON_INSTALL_DIR="/usr/local/uv/python"` |
 | `UV_PYTHON_BIN_DIR` | Python 可执行文件 symlink 目录（默认 `~/.local/bin`） | `export UV_PYTHON_BIN_DIR="/usr/local/bin"` |
 | `UV_TOOL_BIN_DIR` | 工具可执行文件 symlink 目录（默认 `~/.local/bin`） | `export UV_TOOL_BIN_DIR="/usr/local/bin"` |
-| `UV_INDEX_URL` | 默认 PyPI 索引 URL | `export UV_INDEX_URL="https://mirrors.tuna.tsinghua.edu.cn/pypi/simple"` |
+| `UV_INDEX_URL` | 默认 PyPI 索引 URL（对应 `uv.toml` 中的 `[[index]]`） | `export UV_INDEX_URL="http://mirrors.aliyun.com/pypi/simple/"` |
 | `UV_LINK_MODE` | 包链接模式（`clone` / `copy` / `hardlink` / `symlink`） | `export UV_LINK_MODE=copy` |
 | `UV_NO_SYNC` | 跳过自动同步（`1` = 禁用） | `export UV_NO_SYNC=1` |
 

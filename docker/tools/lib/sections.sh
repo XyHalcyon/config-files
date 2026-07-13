@@ -18,7 +18,7 @@ section_uv() {
     [[ "$(cfg hermes.include)" == "yes" ]] && needs_uv=1
     [[ "$needs_uv" -eq 0 ]] && return 0
 
-    local arch; arch=$(detect_arch "$base")
+    local arch; arch=$(detect_arch)
     local uv_target="uv-${arch}-unknown-linux-gnu"
     _out+="# ---------------------------------------------------------------------------
 # 3. uv (Python & tool package manager)

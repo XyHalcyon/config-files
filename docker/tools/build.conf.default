@@ -14,15 +14,22 @@
 #   1. 镜像配置
 #      image.base        基础镜像, 格式: 名称:标签
 #                        默认: ubuntu:26.04
-#                        支持:
-#                          - Ubuntu 系 (x86-64): ubuntu:26.04, ubuntu:22.04 等
-#                          - vllm-ascend (ARM): quay.io/ascend/vllm-ascend:latest 等
-#                            适用于华为昇腾 (Ascend) ARM 架构的 AI 推理环境
-#                        ⚙️ 脚本根据镜像名称自动检测架构 (x86_64 / aarch64),
-#                           匹配规则: 镜像名含 ascend/arm/aarch64 → aarch64, 否则 x86_64
-#                        ⚙️ 脚本根据镜像名称自动检测发行版族, 选择包管理器和 locale 命令:
-#                           - ascend/openeuler/centos/rhel/rocky/alma/fedora → redhat (dnf)
-#                           - ubuntu/debian 及其他 → debian (apt-get)
+#                        示例: ubuntu:26.04, quay.io/ascend/vllm-ascend:latest
+#                        支持任何公开或私有 Docker 镜像
+#
+#      image.arch        CPU 架构, 决定 uv 下载的二进制包
+#                        默认: x86_64
+#                        可选: x86_64, aarch64
+#                          - x86_64: Intel/AMD 64-bit (大多数云主机和桌面环境)
+#                          - aarch64: ARM 64-bit (Apple Silicon, AWS Graviton 等)
+#
+#      image.family      发行版族, 决定使用哪个包管理器和 locale 命令
+#                        默认: debian
+#                        可选: debian, redhat
+#                          - debian: apt-get + locale-gen (Debian 系包管理器,
+#                                     适用于 Ubuntu、Debian 及衍生版)
+#                          - redhat: dnf + localedef (RPM 系包管理器,
+#                                     适用于 CentOS、RHEL、Rocky、Alma、Fedora、openEuler 等)
 #
 #      image.tag         生成镜像的名称和标签, 必须包含冒号分隔
 #                        默认: ubuntu26.04-custom:v0.1
@@ -98,6 +105,8 @@
 # 镜像配置
 # ---------------------------------------------------------------------------
 image.base=ubuntu:26.04
+image.arch=x86_64
+image.family=debian
 image.tag=ubuntu26.04-custom:v0.1
 
 # ---------------------------------------------------------------------------

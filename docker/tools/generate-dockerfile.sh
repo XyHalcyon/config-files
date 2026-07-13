@@ -6,7 +6,7 @@
 #   1. 加载公共库 (解析器/校验器/检测器)
 #   2. 解析配置文件
 #   3. 校验配置项
-#   4. 根据 image.base 检测发行版族 (debian/redhat)
+#   4. 根据 image.family 配置项路由到对应发行版族 (debian/redhat)
 #   5. 路由到对应的分支脚本 (generate-{debian,redhat}.sh)
 #
 # 用法:
@@ -21,7 +21,7 @@
 #
 # 新增发行版族:
 #   1. 创建 generate-<family>.sh (参考 generate-redhat.sh)
-#   2. 在 lib/common.sh 的 detect_family() 添加匹配词
+#   2. 在 lib/common.sh 的 validate_conf() 中添加新族名到 image.family 校验
 #   3. 入口脚本的 case 分支自动路由, 无需修改
 #
 # 依赖: bash >= 4.0 (关联数组, nameref)
@@ -61,8 +61,8 @@ main() {
     validate_conf
 
     # 检测发行版族并路由
-    local family; family=$(detect_family "$(cfg image.base)")
-    log_info "检测发行版族: $family"
+    local family; family=$(cfg image.family)
+    log_info "发行版族: $family"
 
     local branch_script="${SCRIPT_DIR}/generate-${family}.sh"
     if [[ ! -f "$branch_script" ]]; then

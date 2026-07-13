@@ -10,6 +10,8 @@
 # ---------------------------------------------------------------------------
 declare -A _DEFAULTS=(
     [image.base]="ubuntu:26.04"
+    [image.arch]="x86_64"
+    [image.family]="debian"
     [image.tag]="ubuntu26.04-custom:v0.1"
     [locale.codes]="en_US.UTF-8,zh_CN.UTF-8"
     [locale.lang]="en_US.UTF-8"
@@ -98,30 +100,19 @@ parse_conf() {
 }
 
 # ---------------------------------------------------------------------------
-# detect_arch <base_image>
-# 匹配词 ascend/arm/aarch64 → aarch64, 其余默认 x86_64
+# detect_arch
+# 从配置项 image.arch 读取架构, 不再自动探测
 # ---------------------------------------------------------------------------
 detect_arch() {
-    local base="${1,,}"
-    if [[ "$base" == *"ascend"* || "$base" == *"arm"* || "$base" == *"aarch64"* ]]; then
-        printf 'aarch64'
-    else
-        printf 'x86_64'
-    fi
+    cfg image.arch
 }
 
 # ---------------------------------------------------------------------------
-# detect_family <base_image>
-# 匹配词 ascend/openeuler/centos/rhel/rocky/alma/fedora → redhat, 其余默认 debian
+# detect_family
+# 从配置项 image.family 读取发行版族, 不再自动探测
 # ---------------------------------------------------------------------------
 detect_family() {
-    local base="${1,,}"
-    if [[ "$base" == *"ascend"* || "$base" == *"openeuler"* || "$base" == *"centos"* || \
-          "$base" == *"rhel"* || "$base" == *"rocky"* || "$base" == *"alma"* || "$base" == *"fedora"* ]]; then
-        printf 'redhat'
-    else
-        printf 'debian'
-    fi
+    cfg image.family
 }
 
 # ---------------------------------------------------------------------------
@@ -134,6 +125,20 @@ validate_conf() {
     local tag; tag=$(cfg image.tag)
     if [[ "$tag" != *":"* ]]; then
         log_error "image.tag 必须包含 ':' 分隔名称和标签, 当前: '$tag'"
+        errors=$((errors + 1))
+    fi
+
+    # --- image.family: 必须为 debian/redhat ---
+    local family; family=$(cfg image.family)
+    if [[ "$family" != "debian" && "$family" != "redhat" ]]; then
+        log_error "image.family 必须是 debian 或 redhat, 当前: '$family'"
+        errors=$((errors + 1))
+    fi
+
+    # --- image.arch: 必须为 x86_64/aarch64 ---
+    local arch; arch=$(cfg image.arch)
+    if [[ "$arch" != "x86_64" && "$arch" != "aarch64" ]]; then
+        log_error "image.arch 必须是 x86_64 或 aarch64, 当前: '$arch'"
         errors=$((errors + 1))
     fi
 
@@ -223,12 +228,12 @@ validate_conf() {
 # 汇总报告 (供分支脚本生成后调用)
 # ---------------------------------------------------------------------------
 print_summary() {
-    local family; family=$(detect_family "$(cfg image.base)")
+    local family; family=$(detect_family)
     printf '\n'
     log_info "Dockerfile 已生成: ${OUTPUT_DOCKERFILE:-<未设置>}"
     printf '  基础镜像:   %s\n' "$(cfg image.base)"
     printf '  发行版族:   %s\n' "$family"
-    printf '  架构:       %s\n' "$(detect_arch "$(cfg image.base)")"
+    printf '  架构:       %s\n' "$(detect_arch)"
     printf '  输出标签:   %s\n' "$(cfg image.tag)"
     printf '  Python:     %s\n' "$(if [[ "$(cfg python.include)" == "yes" ]]; then printf '%s' "$(cfg python.version)"; else printf '不安装'; fi)"
     printf '  Node.js:    %s\n' "$(if [[ "$(cfg nodejs.include)" == "yes" ]]; then printf '是'; else printf '否'; fi)"
