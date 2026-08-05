@@ -38,9 +38,10 @@ ENV LANG=en_US.UTF-8 \
 # 3. uv (per uv/commands.md §1 安装 + §2 环境变量)
 # ---------------------------------------------------------------------------
 # Install uv binary to /usr/local/uv/bin (system-wide, all users)
+COPY pkgs/uv-x86_64-unknown-linux-gnu.tar.gz /tmp/uv.tar.gz
 RUN mkdir -p /usr/local/uv/bin && \
-    curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-gnu.tar.gz | \
-    tar xz -C /usr/local/uv/bin --strip-components=1
+    tar xz -f /tmp/uv.tar.gz -C /usr/local/uv/bin --strip-components=1 && \
+    rm -f /tmp/uv.tar.gz
 ENV PATH="/usr/local/uv/bin:${PATH}"
 
 # uv environment variables (controls install directories & link mode)
@@ -57,7 +58,8 @@ RUN mkdir -p \
     /root/.config/opencode \
     /root/.config/pip \
     /root/.config/uv \
-    /root/.hermes/skills
+    /root/.hermes/skills \
+    /root/.omo
 
 # ---------------------------------------------------------------------------
 # 5. Copy config files (build context = repo root)
@@ -85,9 +87,11 @@ RUN uv python install 3.10
 
 # OpenCode (AI coding assistant configs)
 COPY opencode/opencode.jsonc      /root/.config/opencode/opencode.jsonc
-COPY opencode/oh-my-openagent.json /root/.config/opencode/oh-my-openagent.json
 COPY opencode/AGENTS.md           /root/.config/opencode/AGENTS.md
 COPY opencode/commands.md         /root/.config/opencode/commands.md
+
+# OMO (oh-my-openagent agent orchestration config)
+COPY omo/omo.jsonc                /root/.omo/omo.jsonc
 
 # Hermes (AI agent config + skills)
 COPY hermes/config.yaml           /root/.hermes/config.yaml

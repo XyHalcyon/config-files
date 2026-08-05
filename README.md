@@ -31,47 +31,53 @@ Vim 编辑器配置。部署至 `~/.vimrc`。
 OpenCode 主配置文件。部署至 `~/.config/opencode/opencode.jsonc`。
 
 - **Provider**：Codiz（Anthropic 兼容 API，基于 `@ai-sdk/anthropic`），地址 `https://codiz.dev/v1`
-- **Models**（Codiz）：`claude-opus-4-7`、`claude-opus-4-7-thinking`、`claude-opus-4-8`、`claude-opus-4-8-thinking`
+- **Models**（Codiz）：`claude-opus-4-8`、`claude-opus-4-8-thinking`
 - **Provider**：bailian-payg（阿里云百炼 Model Studio，Anthropic 兼容 API，基于 `@ai-sdk/anthropic`），地址 `https://dashscope.aliyuncs.com/apps/anthropic/v1`
 - **Models**（bailian-payg）：`glm-5.2`（GLM-5.2）和 `qwen3.7-max`（Qwen3.7 Max），均启用 thinking 模式（budgetTokens=8192）
-- **Plugin**：`oh-my-openagent`，用于代理编排
+- **Plugin**：`oh-my-openagent`，用于代理编排（详见 [`omo/omo.jsonc`](#omoomojsonc)）
 - **Permissions**：`*` → `allow`（允许所有工具调用）
 
-> **注意**：`apiKey` 字段为占位符（`xxx`），请替换为实际的 Codiz API 密钥。
+> **注意**：`apiKey` 字段为占位符（`xxx`），请替换为 Codiz 与 bailian-payg 的实际 API 密钥。
 
 ---
 
-### `opencode/oh-my-openagent.json`
+### `omo/omo.jsonc`
 
-Sisyphus 编排系统的代理与分类模型分配。部署至 `~/.config/opencode/oh-my-openagent.json`。
+OMO（oh-my-openagent）编排系统配置。部署至 `~/.omo/omo.jsonc`（独立 `~/.omo/` 目录，不再混入 `~/.config/opencode/`）。
 
-**Agents** — 各代理的主模型与回退模型分配：
+**结构**：顶层用 `[opencode]` 命名空间包裹（支持多 host 扩展），含 `agents` 与 `categories` 两块；末尾 `_migrations` 记录迁移历史（当前 `2026-08-reasoning-unification`）。
 
-| Agent | Primary Model | Fallback Model | 角色 |
+**Agents** — 各代理的主模型与按序回退模型分配（`fallback_models` 数组按优先级降序）：
+
+| Agent | Primary Model | Fallback Models | 角色 |
 |---|---|---|---|
-| `sisyphus` | `bailian-payg/qwen3.7-max` | `deepseek/deepseek-v4-pro` | 主编排器 |
-| `hephaestus` | `deepseek/deepseek-v4-pro` | `codiz/claude-opus-4-8` | 构建器 |
-| `prometheus` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 规划器 |
-| `oracle` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 高智商推理顾问 |
-| `atlas` | `alibaba-cn/qwen-3.7-max` | `bailian-payg/glm-5.2` | 研究索引 |
-| `metis` | `bailian-payg/glm-5.2` | `alibaba-cn/qwen-3.7-max` | 预规划顾问 |
-| `momus` | `alibaba-cn/qwen-3.7-max` | `bailian-payg/glm-5.2` | 计划审查 |
-| `multimodal-looker` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 视觉分析 |
-| `explore` / `librarian` | `deepseek/deepseek-v4-flash` | — | 上下文 / 参考搜索 |
-| `sisyphus-junior` | `alibaba-cn/qwen-3.7-max` | `deepseek/deepseek-v4-pro` | 任务执行器 |
+| `sisyphus` | `bailian-payg/glm-5.2` | `bailian-payg/qwen3.7-max` → `codiz/claude-opus-4-8` | 主编排器 |
+| `sisyphus-junior` | `bailian-payg/glm-5.2` | `bailian-payg/qwen3.7-max` → `deepseek/deepseek-v4-pro` | 任务执行器 |
+| `hephaestus` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` → `bailian-payg/glm-5.2` | 构建器（`allow_non_gpt_model: true`） |
+| `oracle` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 高智商推理顾问 |
+| `atlas` | `bailian-payg/glm-5.2` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 研究索引 |
+| `metis` | `bailian-payg/qwen3.7-max` | `codiz/claude-opus-4-8` → `codiz/claude-opus-4-8-thinking` | 预规划顾问 |
+| `momus` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 计划审查 |
+| `multimodal-looker` | `codiz/claude-opus-4-8` | `bailian-payg/glm-5.2` → `codiz/claude-opus-4-8-thinking` | 视觉分析 |
+| `prometheus` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 规划器 |
+| `librarian` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` → `bailian-payg/glm-5.2` | 参考搜索 |
+| `explore` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` → `bailian-payg/glm-5.2` | 上下文搜索 |
 
-**Categories** — 任务类型到模型的映射：
+> **注**：`hephaestus.allow_non_gpt_model: true` 允许该构建器使用非 GPT 系模型（如 GLM、Qwen），用于跨厂商模型调度。
 
-| Category | Primary Model | Fallback Model | 用途 |
+**Categories** — 任务类型到模型列表的映射（新结构：`models` 数组，首项为主模型，其余按序回退）：
+
+| Category | Primary Model | Fallback Models | 用途 |
 |---|---|---|---|
-| `ultrabrain` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 复杂逻辑 / 架构 |
-| `artistry` | `alibaba-cn/qwen-3.7-max` | `deepseek/deepseek-v4-pro` | 创意方案 |
+| `artistry` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 创意方案 |
 | `deep` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 自主研究 + 实现 |
-| `visual-engineering` | `deepseek/deepseek-v4-pro` | `codiz/claude-opus-4-8` | 前端 / UI / 样式 |
-| `unspecified-high` | `deepseek/deepseek-v4-pro` | `alibaba-cn/qwen-3.7-max` | 未分类高复杂度 |
-| `writing` | `alibaba-cn/qwen-3.7-max` | `deepseek/deepseek-v4-pro` | 文档 / 写作 |
+| `visual-engineering` | `codiz/claude-opus-4-8` | `codiz/claude-opus-4-8-thinking` | 前端 / UI / 样式 |
+| `unspecified-high` | `bailian-payg/qwen3.7-max` | `codiz/claude-opus-4-8` | 未分类高复杂度 |
+| `writing` | `bailian-payg/qwen3.7-max` | `codiz/claude-opus-4-8` | 文档 / 写作 |
 | `unspecified-low` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` | 未分类低复杂度 |
 | `quick` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` | 简单单文件修改 |
+
+> **变更摘要**（相对老版 `opencode/oh-my-openagent.json`）：① 配置目录从 `~/.config/opencode/` 迁至 `~/.omo/`；② 顶层加 `[opencode]` 命名空间与 `_migrations` 字段；③ categories 结构从 `model` + `fallback_models` 改为 `models` 数组；④ 删除 `ultrabrain` category（用途并入 `artistry`）；⑤ `hephaestus` 新增 `allow_non_gpt_model`；⑥ 全表去除 `alibaba-cn` provider，改用 `codiz` / `bailian-payg` / `deepseek`。
 
 ---
 
@@ -414,9 +420,9 @@ Docker 镜像构建文件，基于 Ubuntu 26.04，部署至项目根目录。
 | 1. 系统包 | vim、git、curl、wget、ca-certificates、locales |
 | 2. Node.js | 通过 NodeSource 安装 LTS v22（含 npm），不依赖系统包版本 |
 | 3. Locale | `en_US.UTF-8` + `zh_CN.UTF-8` |
-| 4. uv + Python | 安装 uv 到 `/usr/local/uv/bin`，通过 `uv python install 3.10` 安装 Python |
-| 5. 目录结构 | 创建 `~/.config/*` 和 `~/.hermes/skills` |
-| 6. 配置复制 | 7 套工具配置 → 对应路径（见下方部署章节） |
+| 4. uv + Python | 从 `pkgs/` 本地包安装 uv 0.12.1 到 `/usr/local/uv/bin`，通过 `uv python install 3.10` 安装 Python |
+| 5. 目录结构 | 创建 `~/.config/*`、`~/.omo` 和 `~/.hermes/skills` |
+| 6. 配置复制 | 7 套工具配置 → 对应路径（opencode 含 omo 编排配置，见下方部署章节） |
 | 7. OpenCode | `npm install -g opencode-ai@latest` |
 | 8. Hermes Agent | `uv tool install hermes-agent` |
 | 9. 环境变量 | `EDITOR=vim`、`PYTHONUNBUFFERED=1` 等 |
@@ -497,9 +503,12 @@ cp vim/.vimrc ~/.vimrc
 # OpenCode
 mkdir -p ~/.config/opencode
 cp opencode/opencode.jsonc ~/.config/opencode/
-cp opencode/oh-my-openagent.json ~/.config/opencode/
 cp opencode/AGENTS.md ~/.config/opencode/
 cp opencode/commands.md ~/.config/opencode/
+
+# OMO (oh-my-openagent 编排配置)
+mkdir -p ~/.omo
+cp omo/omo.jsonc ~/.omo/
 
 # Pip
 mkdir -p ~/.config/pip

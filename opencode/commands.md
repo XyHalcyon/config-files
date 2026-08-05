@@ -13,7 +13,7 @@
 | `opencode -c` | 在 TUI 中继续最近会话 | `opencode -c` |
 | `opencode -s SESSION_ID` | 恢复指定会话 | `opencode -s abc123def` |
 | `opencode --fork -c` | Fork 最近会话（分支新会话） | `opencode --fork -c` |
-| `opencode -m provider/model` | 指定模型启动 | `opencode -m codiz/claude-opus-4-7` |
+| `opencode -m provider/model` | 指定模型启动 | `opencode -m codiz/claude-opus-4-8` |
 | `opencode --agent NAME` | 指定 Agent 启动 | `opencode --agent sisyphus` |
 | `opencode --prompt "提示"` | 带初始提示启动 | `opencode --prompt "你是安全专家"` |
 
@@ -95,8 +95,8 @@
         "apiKey": "your-api-key"
       },
       "models": {
-        "claude-opus-4-7": { "name": "claude-opus-4-7" },
-        "claude-opus-4-7-thinking": { "name": "claude-opus-4-7-thinking" }
+        "claude-opus-4-8": { "name": "claude-opus-4-8" },
+        "claude-opus-4-8-thinking": { "name": "claude-opus-4-8-thinking" }
       }
     }
   }
@@ -142,12 +142,12 @@ opencode mcp add api --url https://api.example.com --header "Authorization: Bear
 
 | Agent | 用途 | Category | 用途 |
 |---|---|---|---|
-| `sisyphus` | 主编排器 | `ultrabrain` | 高难度逻辑/架构 |
-| `hephaestus` | 构建器 | `deep` | 自主研究+实现 |
-| `prometheus` | 规划器 | `visual-engineering` | 前端/UI/样式 |
-| `oracle` | 高 IQ 推理顾问 | `quick` | 简单单文件修改 |
-| `explore` / `librarian` | 代码搜索 | `artistry` | 创意方案 |
-| `metis` / `momus` | 规划/审查 | `writing` | 文档/写作 |
+| `sisyphus` / `sisyphus-junior` | 主编排 / 任务执行 | `deep` | 自主研究 + 实现 |
+| `hephaestus` | 构建器 | `visual-engineering` | 前端 / UI / 样式 |
+| `prometheus` / `oracle` | 规划 / 推理 | `artistry` | 创意方案 |
+| `metis` / `momus` | 预规划 / 审查 | `writing` | 文档 / 写作 |
+| `atlas` / `multimodal-looker` | 索引 / 视觉 | `unspecified-high` | 未分类高复杂度 |
+| `explore` / `librarian` | 代码 / 文档搜索 | `unspecified-low` / `quick` | 未分类低复杂度 / 简单修改 |
 
 ---
 
@@ -322,7 +322,7 @@ opencode run "什么是 Rust 的所有权系统？"
 opencode run "review this code" -f src/main.ts
 
 # 指定模型
-opencode run "解释量子计算" -m codiz/claude-opus-4-7-thinking
+opencode run "解释量子计算" -m codiz/claude-opus-4-8-thinking
 
 # 继续上次会话
 opencode run -c "继续实现剩余的接口"
@@ -334,7 +334,7 @@ opencode run -c "继续实现剩余的接口"
 
 ```
 ~/.config/opencode/opencode.jsonc          主配置文件
-~/.config/opencode/oh-my-openagent.json    Agent/Category 模型分配
+~/.omo/omo.jsonc                          Agent/Category 模型分配
 ~/.config/opencode/AGENTS.md               行为指南
 ~/.local/share/opencode/                   会话数据 (SQLite)
 ~/.cache/opencode/                         缓存文件

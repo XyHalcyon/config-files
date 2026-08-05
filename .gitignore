@@ -6,3 +6,6 @@ AGENTS.md
 
 # Omo local data
 .omo/
+
+# Generated Dockerfile (by docker/tools/generate-dockerfile.sh)
+docker/Dockerfile.generated

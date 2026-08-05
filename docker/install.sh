@@ -89,20 +89,15 @@ mkdir -p /etc/profile.d
 
 persist_env() {
     local key="$1" val="$2"
-    export "$key=$val"
-    # profile.d: export KEY="VALUE" (支持 $VAR 展开, 用于 PATH)
-    if grep -q "^export ${key}=" "$PROFILE_ENV"; then
-        sed -i "s|^export ${key}=.*|export ${key}=\"${val}\"|" "$PROFILE_ENV"
-    else
-        printf 'export %s="%s"\n' "$key" "$val" >> "$PROFILE_ENV"
-    fi
-    # /etc/environment: KEY=VALUE (无 export, 不展开变量) — 仅对非 PATH 类静态值
+    # PATH 跳过 export: val 含字面量 ${PATH}, 直接 export 会让 PATH 变字面量; 调用者自行 export
+    [[ "$key" != "PATH" ]] && export "$key=$val"
+    # profile.d: 删全部 ^export KEY= 行再追加 (幂等; sed 替换只改首行会留重复)
+    sed -i "/^export ${key}=/d" "$PROFILE_ENV"
+    printf 'export %s="%s"\n' "$key" "$val" >> "$PROFILE_ENV"
+    # /etc/environment: 同上, 仅非 PATH 类静态值
     if [[ "$key" != "PATH" ]]; then
-        if grep -q "^${key}=" "$ETC_ENV"; then
-            sed -i "s|^${key}=.*|${key}=${val}|" "$ETC_ENV"
-        else
-            printf '%s=%s\n' "$key" "$val" >> "$ETC_ENV"
-        fi
+        sed -i "/^${key}=/d" "$ETC_ENV"
+        printf '%s=%s\n' "$key" "$val" >> "$ETC_ENV"
     fi
 }
 
@@ -180,13 +175,17 @@ fi
 #    安装到 /usr/local/uv/bin (系统级, 所有用户可见)
 #    环境变量控制 uv 的安装目录与链接模式
 # =============================================================================
-log "[3/8] 安装 uv 到 /usr/local/uv/bin"
+log "[3/8] 安装 uv 到 /usr/local/uv/bin (从 pkgs/ 本地包)"
+UV_PKG="$REPO_ROOT/pkgs/${UV_TARBALL}"
+if [[ ! -f "$UV_PKG" ]]; then
+    die "未找到 uv 本地包: $UV_PKG (请先下载到 pkgs/ 目录, 参考 README)"
+fi
 if ! command -v uv >/dev/null 2>&1; then
     mkdir -p /usr/local/uv/bin
-    curl -LsSf "https://github.com/astral-sh/uv/releases/latest/download/${UV_TARBALL}" \
-        | tar xz -C /usr/local/uv/bin --strip-components=1
+    tar xz -f "$UV_PKG" -C /usr/local/uv/bin --strip-components=1
+    log "      uv 已安装 ($(uv --version 2>/dev/null || echo installed))"
 else
-    log "      uv 已存在 ($(uv version 2>/dev/null || echo installed)), 跳过"
+    log "      uv 已存在 ($(uv --version 2>/dev/null || echo installed)), 跳过"
 fi
 # PATH 写 profile.d (用 $PATH 展开, 不写 /etc.environment 以免覆盖系统 PATH)
 persist_env PATH "/usr/local/uv/bin:\${PATH}"
@@ -202,18 +201,19 @@ persist_env UV_LINK_MODE           "$UV_LINK_MODE"
 # =============================================================================
 # 4. Directory structure (对应 Dockerfile Section 4)
 # =============================================================================
-log "[4/8] 创建目录结构 (~/.config/*, ~/.hermes/skills)"
+log "[4/8] 创建目录结构 (~/.config/*, ~/.omo, ~/.hermes/skills)"
 mkdir -p \
     /root/.config/opencode \
     /root/.config/pip \
     /root/.config/uv \
-    /root/.hermes/skills
+    /root/.hermes/skills \
+    /root/.omo
 
 # =============================================================================
 # 5. Copy config files (对应 Dockerfile Section 5)
 #    从挂载的仓库目录复制各工具配置到对应路径
 # =============================================================================
-log "[5/8] 复制配置文件 (vim/git/pip/npm/uv/opencode/hermes)"
+log "[5/8] 复制配置文件 (vim/git/pip/npm/uv/opencode/omo/hermes)"
 copy() {
     local src="$1" dst="$2"
     if [[ -f "$src" ]]; then
@@ -240,9 +240,11 @@ copy    "$REPO_ROOT/uv/uv.toml"                  /root/.config/uv/uv.toml
 
 # OpenCode (AI 编程助手配置)
 copy    "$REPO_ROOT/opencode/opencode.jsonc"      /root/.config/opencode/opencode.jsonc
-copy    "$REPO_ROOT/opencode/oh-my-openagent.json" /root/.config/opencode/oh-my-openagent.json
 copy    "$REPO_ROOT/opencode/AGENTS.md"          /root/.config/opencode/AGENTS.md
 copy    "$REPO_ROOT/opencode/commands.md"        /root/.config/opencode/commands.md
+
+# OMO (Agent 编排配置)
+copy    "$REPO_ROOT/omo/omo.jsonc"               /root/.omo/omo.jsonc
 
 # Hermes (Agent 配置 + 技能库)
 copy    "$REPO_ROOT/hermes/config.yaml"          /root/.hermes/config.yaml
@@ -303,7 +305,7 @@ echo
 log "安装完成 ✅"
 echo "  Python:      $(uv python find "$PYTHON_VERSION" 2>/dev/null || echo "$PYTHON_VERSION (uv 管理)")"
 echo "  Node.js:     $(node --version 2>/dev/null || echo 未安装)"
-echo "  uv:          $(uv version 2>/dev/null || echo 未安装)"
+echo "  uv:          $(uv --version 2>/dev/null || echo 未安装)"
 echo "  opencode:    $(opencode --version 2>/dev/null || echo 未安装)"
 echo "  hermes:      $(uv tool list 2>/dev/null | grep -o 'hermes-agent.*' || echo 未安装)"
 echo

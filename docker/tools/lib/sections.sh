@@ -55,9 +55,10 @@ section_uv() {
     _out+="# ---------------------------------------------------------------------------
 # 3. uv (Python & tool package manager)
 # ---------------------------------------------------------------------------
+COPY pkgs/${uv_target}.tar.gz /tmp/uv.tar.gz
 RUN mkdir -p /usr/local/uv/bin && \\
-    curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/${uv_target}.tar.gz | \\
-    tar xz -C /usr/local/uv/bin --strip-components=1
+    tar xz -f /tmp/uv.tar.gz -C /usr/local/uv/bin --strip-components=1 && \\
+    rm -f /tmp/uv.tar.gz
 ENV PATH=\"/usr/local/uv/bin:\${PATH}\"
 
 ENV UV_PYTHON_INSTALL_DIR=\"/usr/local/uv/python\" \\
@@ -77,6 +78,7 @@ section_dirs() {
 
     local dirs=()
     [[ "$(cfg opencode.include)" == "yes" ]] && dirs+=("/root/.config/opencode")
+    [[ "$(cfg opencode.include)" == "yes" ]] && dirs+=("/root/.omo")
     [[ "$(cfg python.include)" == "yes" ]] && dirs+=("/root/.config/uv")
     [[ "$(cfg hermes.include)" == "yes" ]] && dirs+=("/root/.hermes/skills")
 
@@ -146,9 +148,11 @@ RUN uv python install $(cfg python.version)
     if [[ "$(cfg opencode.include)" == "yes" ]]; then
         _out+="# OpenCode (AI coding assistant configs)
 COPY opencode/opencode.jsonc      /root/.config/opencode/opencode.jsonc
-COPY opencode/oh-my-openagent.json /root/.config/opencode/oh-my-openagent.json
 COPY opencode/AGENTS.md           /root/.config/opencode/AGENTS.md
 COPY opencode/commands.md         /root/.config/opencode/commands.md
+
+# OMO (oh-my-openagent agent orchestration config)
+COPY omo/omo.jsonc                /root/.omo/omo.jsonc
 
 "
     fi
