@@ -11,17 +11,18 @@
 # 与 docker/Dockerfile 的对应关系:
 #   RUN  → 普通命令 (apt-get / curl / npm / uv ...)
 #   ENV  → 写入 /etc/profile.d/dev-env.sh (login shell) + /etc/environment (PAM/非 shell)
-#   COPY → cp 自挂载的仓库目录 (默认 /config-files)
+#   COPY → cp 自本仓库目录 (脚本自动按自身位置定位仓库根, 无需挂载)
 #
 # 前置条件:
 #   1. 以 root 运行 (apt-get 需要)
-#   2. 本仓库已挂载到容器内, 默认路径 /config-files:
-#        docker run -it -v <本仓库宿主路径>:/config-files ubuntu:26.04
+#   2. 本仓库已存在于容器内 (git clone / 镜像内置 / 已 checkout 均可),
+#      在仓库根目录 (config-files/) 内执行本脚本即可, 容器无需 -v 挂载
 #
-# 用法:
-#   bash /config-files/docker/install.sh                       # 默认全装
-#   bash /config-files/docker/install.sh --repo /mnt/config    # 自定义挂载路径
-#   PYTHON_VERSION=3.12 bash /config-files/docker/install.sh   # 指定 Python 版本
+# 用法 (在容器内、仓库根目录下执行):
+#   bash docker/install.sh                       # 默认全装
+#   bash docker/install.sh --python 3.12         # 指定 Python 版本
+#   bash docker/install.sh --node 20             # 指定 Node.js 版本
+#   PYTHON_VERSION=3.12 bash docker/install.sh   # 环境变量方式
 #
 # 幂等: 可重复执行, 已完成的步骤会跳过, 配置文件会被覆盖为仓库最新版
 # =============================================================================
@@ -30,7 +31,10 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # 可配置参数 (环境变量或命令行参数覆盖)
 # ---------------------------------------------------------------------------
-REPO_DIR="${REPO_DIR:-/config-files}"            # 仓库挂载路径
+# 仓库根 = 脚本所在目录的上一级 (脚本位于 <repo>/docker/install.sh)
+# 通过 BASH_SOURCE 定位, 无需挂载、无需 CWD 假设, 在仓库内任意位置执行均可
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PYTHON_VERSION="${PYTHON_VERSION:-3.10}"        # uv 安装的 Python 版本
 NODEJS_VERSION="${NODEJS_VERSION:-22}"           # NodeSource 的 Node.js 大版本
 UV_LINK_MODE="${UV_LINK_MODE:-copy}"             # uv 包链接模式 (容器兼容性最优)
@@ -48,7 +52,6 @@ die()  { err "$*"; exit 1; }
 # ---------------------------------------------------------------------------
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --repo)        REPO_DIR="$2"; shift 2 ;;
         --python)      PYTHON_VERSION="$2"; shift 2 ;;
         --node)        NODEJS_VERSION="$2"; shift 2 ;;
         --link-mode)   UV_LINK_MODE="$2"; shift 2 ;;
@@ -64,12 +67,11 @@ done
 # ---------------------------------------------------------------------------
 [[ $EUID -eq 0 ]] || die "必须以 root 运行 (apt-get 需要), 请加 sudo 或用 root 进入容器"
 
-if [[ ! -d "$REPO_DIR" ]]; then
-    err "仓库未挂载到 $REPO_DIR"
-    die "请以 -v <本仓库宿主路径>:$REPO_DIR 启动容器, 或用 --repo 指定挂载路径"
+# 确认脚本位于本仓库内 (docker/install.sh), 上一级应为仓库根 (含 docker/Dockerfile)
+if [[ ! -f "$REPO_ROOT/docker/Dockerfile" ]]; then
+    err "未在仓库根定位到 docker/Dockerfile (REPO_ROOT=$REPO_ROOT)"
+    die "请在仓库根目录 (config-files/) 内执行: bash docker/install.sh"
 fi
-[[ -f "$REPO_DIR/docker/Dockerfile" ]] \
-    || die "$REPO_DIR 不是本仓库根目录 (缺少 docker/Dockerfile), 请检查挂载路径"
 
 # ---------------------------------------------------------------------------
 # 工具函数: 持久化环境变量 (对应 Dockerfile 的 ENV 指令)
@@ -115,7 +117,7 @@ case "$arch" in
 esac
 
 log "开始安装开发环境 (Python $PYTHON_VERSION, Node.js $NODEJS_VERSION, uv $arch)"
-log "仓库路径: $REPO_DIR"
+log "仓库路径: $REPO_ROOT"
 
 # =============================================================================
 # 1. System packages (对应 Dockerfile Section 1)
@@ -209,22 +211,22 @@ copy_dir() {
 }
 
 # Vim / Git / Pip / npm / uv
-copy    "$REPO_DIR/vim/.vimrc"                   /root/.vimrc
-copy    "$REPO_DIR/git/.gitconfig"              /root/.gitconfig
-copy    "$REPO_DIR/pip/pip.conf"                /root/.config/pip/pip.conf
-copy    "$REPO_DIR/npm/.npmrc"                  /root/.npmrc
-copy    "$REPO_DIR/uv/uv.toml"                  /root/.config/uv/uv.toml
+copy    "$REPO_ROOT/vim/.vimrc"                   /root/.vimrc
+copy    "$REPO_ROOT/git/.gitconfig"              /root/.gitconfig
+copy    "$REPO_ROOT/pip/pip.conf"                /root/.config/pip/pip.conf
+copy    "$REPO_ROOT/npm/.npmrc"                  /root/.npmrc
+copy    "$REPO_ROOT/uv/uv.toml"                  /root/.config/uv/uv.toml
 
 # OpenCode (AI 编程助手配置)
-copy    "$REPO_DIR/opencode/opencode.jsonc"      /root/.config/opencode/opencode.jsonc
-copy    "$REPO_DIR/opencode/oh-my-openagent.json" /root/.config/opencode/oh-my-openagent.json
-copy    "$REPO_DIR/opencode/AGENTS.md"          /root/.config/opencode/AGENTS.md
-copy    "$REPO_DIR/opencode/commands.md"        /root/.config/opencode/commands.md
+copy    "$REPO_ROOT/opencode/opencode.jsonc"      /root/.config/opencode/opencode.jsonc
+copy    "$REPO_ROOT/opencode/oh-my-openagent.json" /root/.config/opencode/oh-my-openagent.json
+copy    "$REPO_ROOT/opencode/AGENTS.md"          /root/.config/opencode/AGENTS.md
+copy    "$REPO_ROOT/opencode/commands.md"        /root/.config/opencode/commands.md
 
 # Hermes (Agent 配置 + 技能库)
-copy    "$REPO_DIR/hermes/config.yaml"          /root/.hermes/config.yaml
-copy    "$REPO_DIR/hermes/.env"                 /root/.hermes/.env
-copy_dir "$REPO_DIR/hermes/skills/"            /root/.hermes/skills/
+copy    "$REPO_ROOT/hermes/config.yaml"          /root/.hermes/config.yaml
+copy    "$REPO_ROOT/hermes/.env"                 /root/.hermes/.env
+copy_dir "$REPO_ROOT/hermes/skills/"            /root/.hermes/skills/
 
 # ---------------------------------------------------------------------------
 # Python via uv (对应 Dockerfile RUN uv python install 3.10)
