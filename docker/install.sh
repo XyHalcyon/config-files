@@ -107,6 +107,30 @@ persist_env() {
 }
 
 # ---------------------------------------------------------------------------
+# apt 包安装 (幂等): 按 dpkg 状态逐包判断, 仅装缺失的包
+#   - 避免 "vim 已存在则跳过整块" 导致 locales 等被漏装 (locale-gen 找不到)
+#   - 仅在有缺失包时才 apt-get update, 重跑时省时
+# ---------------------------------------------------------------------------
+apt_install_if_missing() {
+    local missing=()
+    for pkg in "$@"; do
+        if dpkg -s "$pkg" >/dev/null 2>&1; then
+            :                           # 已装
+        else
+            missing+=("$pkg")
+        fi
+    done
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        log "      安装缺失包: ${missing[*]}"
+        apt-get update
+        apt-get install -y --no-install-recommends "${missing[@]}"
+        rm -rf /var/lib/apt/lists/*
+    else
+        log "      全部已装, 跳过: $*"
+    fi
+}
+
+# ---------------------------------------------------------------------------
 # CPU 架构检测 (决定 uv 下载的二进制包, 参考 docker/tools 的 detect_arch)
 # ---------------------------------------------------------------------------
 arch="$(uname -m)"
@@ -121,19 +145,25 @@ log "仓库路径: $REPO_ROOT"
 
 # =============================================================================
 # 1. System packages (对应 Dockerfile Section 1)
+#    按 dpkg 状态逐包判断, 避免 "vim 已存在 → 跳过整块 → locales 漏装" 的问题
 # =============================================================================
 log "[1/8] 安装系统包 (apt: vim git curl wget ca-certificates locales)"
-if ! command -v vim >/dev/null 2>&1; then
-    apt-get update
-    apt-get install -y --no-install-recommends \
-        vim git curl wget ca-certificates locales
-    rm -rf /var/lib/apt/lists/*
-else
-    log "      vim 已存在, 跳过 apt 系统包安装"
-fi
+apt_install_if_missing vim git curl wget ca-certificates locales
+
+# =============================================================================
+# 2. Locale (对应 Dockerfile Section 2)
+#    提前到 Node.js 之前: locale 生成后, 后续 apt 操作不再触发 perl locale 警告
+#    vim 配置要求 encoding=utf-8, langmenu=zh_CN.UTF-8, 故需生成对应 locale
+# =============================================================================
+log "[2/8] 生成 Locale (en_US.UTF-8, zh_CN.UTF-8)"
+locale-gen en_US.UTF-8 zh_CN.UTF-8
+persist_env LANG en_US.UTF-8
+persist_env LC_ALL en_US.UTF-8
+# 立即生效, 避免 nodejs 安装时 perl 报 locale 警告
+export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 # ---------------------------------------------------------------------------
-# Node.js (对应 Dockerfile "Node.js via NodeSource", Section 1 与 2 之间)
+# Node.js (对应 Dockerfile "Node.js via NodeSource", Section 2 与 3 之间)
 #    通过 NodeSource 安装 LTS, 不依赖系统包版本, 含 npm
 # ---------------------------------------------------------------------------
 log "[*]   安装 Node.js v${NODEJS_VERSION} (NodeSource)"
@@ -144,15 +174,6 @@ if ! command -v node >/dev/null 2>&1; then
 else
     log "      node 已存在 ($(node --version)), 跳过"
 fi
-
-# =============================================================================
-# 2. Locale (对应 Dockerfile Section 2)
-#    vim 配置要求 encoding=utf-8, langmenu=zh_CN.UTF-8, 故需生成对应 locale
-# =============================================================================
-log "[2/8] 生成 Locale (en_US.UTF-8, zh_CN.UTF-8)"
-locale-gen en_US.UTF-8 zh_CN.UTF-8
-persist_env LANG en_US.UTF-8
-persist_env LC_ALL en_US.UTF-8
 
 # =============================================================================
 # 3. uv (对应 Dockerfile Section 3)
