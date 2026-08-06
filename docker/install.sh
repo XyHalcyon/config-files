@@ -192,6 +192,10 @@ persist_env PATH "/usr/local/uv/bin:\${PATH}"
 # 立即生效供后续命令使用
 export PATH="/usr/local/uv/bin:${PATH}"
 
+# symlink 到 /usr/local/bin (系统默认 PATH, 非 login shell 也能用 uv)
+ln -sf /usr/local/uv/bin/uv  /usr/local/bin/uv
+ln -sf /usr/local/uv/bin/uvx /usr/local/bin/uvx
+
 persist_env UV_PYTHON_INSTALL_DIR /usr/local/uv/python
 persist_env UV_PYTHON_BIN_DIR     /usr/local/bin
 persist_env UV_TOOL_DIR           /usr/local/uv/tools
@@ -296,6 +300,11 @@ persist_env PYTHONUNBUFFERED 1
 mkdir -p /workspace
 if ! grep -q "cd /workspace" /root/.bashrc 2>/dev/null; then
     printf '\n# 进入默认工作目录\ncd /workspace 2>/dev/null\n' >> /root/.bashrc
+fi
+
+# .bashrc source profile.d 让非 login shell 也能用环境变量 (login shell 已通过 /etc/profile source 过, 用 UV_LINK_MODE 判断避免重复 source 导致 PATH 重复追加)
+if ! grep -q "source /etc/profile.d/dev-env.sh" /root/.bashrc 2>/dev/null; then
+    printf '\n# source 开发环境变量 (login shell 已 source 过, UV_LINK_MODE 判断避免重复 source 导致 PATH 重复)\n[ -f /etc/profile.d/dev-env.sh ] && [ -z "${UV_LINK_MODE:-}" ] && source /etc/profile.d/dev-env.sh\n' >> /root/.bashrc
 fi
 
 # =============================================================================
