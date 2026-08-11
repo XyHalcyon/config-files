@@ -55,6 +55,14 @@
 #                        默认: copy (Docker 容器兼容性最优)
 #                        可选: copy, hardlink, symlink, clone, local
 #
+#      python.default_venv  是否创建系统默认 venv 'common' (Python + pip):
+#                        默认: yes
+#                        ⚠️ 依赖 python.include=yes (venv 基于 uv 安装的 Python)
+#                        yes: 在 /usr/local/uv/envs/common 创建 venv, 装 pip,
+#                             并在 .bashrc 前置 common/bin + 设 VIRTUAL_ENV
+#                             (可被 source <other>/bin/activate 覆盖)
+#                        no:  仅安装裸 Python, 不创建默认 venv
+#
 #   4. Vim
 #      vim.include       是否安装 vim 并复制 .vimrc: yes / no
 #                        默认: yes
@@ -112,6 +120,7 @@ locale.lang=en_US.UTF-8
 python.include=yes
 python.version=3.10
 python.uv_link_mode=copy
+python.default_venv=yes
 
 # ---------------------------------------------------------------------------
 # Vim

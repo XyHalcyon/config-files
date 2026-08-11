@@ -18,6 +18,7 @@ declare -A _DEFAULTS=(
     [python.include]="yes"
     [python.version]="3.10"
     [python.uv_link_mode]="copy"
+    [python.default_venv]="yes"
     [vim.include]="yes"
     [git.include]="yes"
     [nodejs.include]="yes"
@@ -162,7 +163,7 @@ validate_conf() {
 
     # --- yes/no 布尔值校验 ---
     local bool_keys=(
-        python.include vim.include git.include
+        python.include python.default_venv vim.include git.include
         nodejs.include
         opencode.include hermes.include
     )
@@ -205,6 +206,12 @@ validate_conf() {
     # --- hermes 依赖 python (uv) ---
     if [[ "$(cfg hermes.include)" == "yes" && "$(cfg python.include)" == "no" ]]; then
         log_error "hermes 需要 python (通过 uv 安装), 但 python.include=no"
+        errors=$((errors + 1))
+    fi
+
+    # --- default_venv 依赖 python (uv) ---
+    if [[ "$(cfg python.default_venv)" == "yes" && "$(cfg python.include)" == "no" ]]; then
+        log_error "python.default_venv 需要 python (venv 基于 uv 安装的 Python), 但 python.include=no"
         errors=$((errors + 1))
     fi
 
