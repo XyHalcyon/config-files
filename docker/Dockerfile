@@ -85,6 +85,12 @@ COPY uv/uv.toml /root/.config/uv/uv.toml
 # MUST be after COPY uv/uv.toml so python-install-mirror takes effect
 RUN uv python install 3.10
 
+# Default Python venv 'common' — uv venv doesn't seed pip by default, install explicitly.
+# .bashrc prepend mimics `source activate`; other venv activation overrides via PATH prepend.
+RUN uv venv /usr/local/uv/envs/common --python 3.10 \
+    && uv pip install pip --python /usr/local/uv/envs/common/bin/python
+RUN printf '\n# 默认 python 环境: common (可被 source <other>/bin/activate 覆盖)\nexport PATH="/usr/local/uv/envs/common/bin:$PATH"\nexport VIRTUAL_ENV="/usr/local/uv/envs/common"\n' >> /root/.bashrc
+
 # OpenCode (AI coding assistant configs)
 COPY opencode/opencode.jsonc      /root/.config/opencode/opencode.jsonc
 COPY opencode/AGENTS.md           /root/.config/opencode/AGENTS.md

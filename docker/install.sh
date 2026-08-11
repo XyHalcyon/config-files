@@ -266,6 +266,25 @@ else
     log "      Python ${PYTHON_VERSION} 已安装, 跳过"
 fi
 
+# ---------------------------------------------------------------------------
+# Default Python venv 'common' (uv-managed Python + pip)
+#    作为系统默认 Python 环境; source <other>/bin/activate 可覆盖
+#    uv venv 不自带 pip, 需显式安装
+# ---------------------------------------------------------------------------
+log "[*]   创建默认 venv 'common' (/usr/local/uv/envs/common)"
+if [[ ! -d /usr/local/uv/envs/common ]]; then
+    uv venv /usr/local/uv/envs/common --python "$PYTHON_VERSION"
+    uv pip install pip --python /usr/local/uv/envs/common/bin/python
+    log "      common venv 已创建 (Python $PYTHON_VERSION + pip)"
+else
+    log "      common venv 已存在, 跳过"
+fi
+
+# .bashrc: 默认激活 common (可被其他 venv 的 source activate 覆盖)
+if ! grep -q 'uv/envs/common/bin' /root/.bashrc 2>/dev/null; then
+    printf '\n# 默认 python 环境: common (可被 source <other>/bin/activate 覆盖)\nexport PATH="/usr/local/uv/envs/common/bin:$PATH"\nexport VIRTUAL_ENV="/usr/local/uv/envs/common"\n' >> /root/.bashrc
+fi
+
 # =============================================================================
 # 6. OpenCode (对应 Dockerfile Section 6, 依赖 Node.js)
 #    API Key 在 opencode/opencode.jsonc 中为占位符, 使用前请替换
