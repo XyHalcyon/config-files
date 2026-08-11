@@ -93,6 +93,7 @@ RUN "
     section_uv "$(cfg image.base)" out
     section_dirs out
     section_copy out
+    section_default_venv out
     section_opencode_install out
     section_hermes_install out
     section_env out
