@@ -317,7 +317,7 @@ Git 全局配置文件。部署至 `~/.gitconfig`。
 | `pull` | `ff` | `only` | 仅快进合并，有分叉时报错 |
 | `fetch` | `prune` | `true` | fetch 时自动清理已删除的远程分支引用 |
 | `rebase` | `autoStash` | `true` | rebase 前自动 stash |
-| `merge` | `conflictstyle` | `zdiff3` | 冲突显示 base 版本，三方对比 |
+| `merge` | `conflictstyle` | `diff3` | 冲突显示 base 版本，三方对比（兼容所有 git 版本） |
 | `alias` | `lg` | `log --oneline --graph --all --decorate` | 可视化提交历史 |
 
 **等效命令：**
@@ -331,7 +331,7 @@ Git 全局配置文件。部署至 `~/.gitconfig`。
 | `git config --global pull.ff only` | `pull.ff` |
 | `git config --global fetch.prune true` | `fetch.prune` |
 | `git config --global rebase.autoStash true` | `rebase.autoStash` |
-| `git config --global merge.conflictstyle zdiff3` | `merge.conflictstyle` |
+| `git config --global merge.conflictstyle diff3` | `merge.conflictstyle` |
 | `git config --global alias.lg "log --oneline --graph --all --decorate"` | `alias.lg` |
 
 ---

@@ -17,6 +17,6 @@
 [rebase]
 	autoStash = true
 [merge]
-	conflictstyle = zdiff3
+	conflictstyle = diff3
 [alias]
 	lg = log --oneline --graph --all --decorate
