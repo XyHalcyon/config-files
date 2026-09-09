@@ -1,9 +1,7 @@
 {
-  "plugin": ["oh-my-openagent"],
   "$schema": "https://opencode.ai/config.json",
-  "permission": {
-    "*": "allow"
-  },
+  "plugin": ["oh-my-openagent"],
+  "disabled_providers": ["bailian-payg"],
   "provider": {
     "codiz": {
       "npm": "@ai-sdk/anthropic",
@@ -13,7 +11,7 @@
         "apiKey": "xxx"
       },
       "models": {
-      "claude-opus-4-8": {
+        "claude-opus-4-8": {
           "name": "claude-opus-4-8"
         },
         "claude-opus-4-8-thinking": {
