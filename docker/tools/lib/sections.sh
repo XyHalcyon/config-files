@@ -168,7 +168,8 @@ COPY hermes/skills/               /root/.hermes/skills/
 }
 
 # ---------------------------------------------------------------------------
-# Section 5a: Default Python venv 'common' (依赖 section_copy 的 python.include=yes)
+# Section 5a: Shared Python venv 'common' (依赖 section_copy 的 python.include=yes)
+#     仅创建共享 venv, 不在新终端默认激活 (需手动 source activate)
 # ---------------------------------------------------------------------------
 section_default_venv() {
     local -n _out=$1
@@ -177,13 +178,13 @@ section_default_venv() {
 
     local pyver; pyver=$(cfg python.version)
     _out+="# ---------------------------------------------------------------------------
-# 5a. Default Python venv 'common' (uv-managed Python + pip)
+# 5a. Shared Python venv 'common' (uv-managed Python + pip)
 #     Pip installed explicitly (uv venv doesn't seed pip by default).
-#     .bashrc prepend mimics 'source activate'; other venv activation overrides.
+#     Not auto-activated on new terminals; activate manually via:
+#     source /usr/local/uv/envs/common/bin/activate
 # ---------------------------------------------------------------------------
 RUN uv venv /usr/local/uv/envs/common --python ${pyver} \\
     && uv pip install pip --python /usr/local/uv/envs/common/bin/python
-RUN printf '\\n# 默认 python 环境: common (可被 source <other>/bin/activate 覆盖)\\nexport PATH=\"/usr/local/uv/envs/common/bin:\$PATH\"\\nexport VIRTUAL_ENV=\"/usr/local/uv/envs/common\"\\n' >> /root/.bashrc
 
 "
 }
