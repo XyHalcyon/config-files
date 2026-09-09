@@ -267,22 +267,18 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Default Python venv 'common' (uv-managed Python + pip)
-#    作为系统默认 Python 环境; source <other>/bin/activate 可覆盖
+# Shared Python venv 'common' (uv-managed Python + pip)
+#    仅创建共享 venv, 不在新终端默认激活; 需要时手动:
+#    source /usr/local/uv/envs/common/bin/activate
 #    uv venv 不自带 pip, 需显式安装
 # ---------------------------------------------------------------------------
-log "[*]   创建默认 venv 'common' (/usr/local/uv/envs/common)"
+log "[*]   创建共享 venv 'common' (/usr/local/uv/envs/common)"
 if [[ ! -d /usr/local/uv/envs/common ]]; then
     uv venv /usr/local/uv/envs/common --python "$PYTHON_VERSION"
     uv pip install pip --python /usr/local/uv/envs/common/bin/python
     log "      common venv 已创建 (Python $PYTHON_VERSION + pip)"
 else
     log "      common venv 已存在, 跳过"
-fi
-
-# .bashrc: 默认激活 common (可被其他 venv 的 source activate 覆盖)
-if ! grep -q 'uv/envs/common/bin' /root/.bashrc 2>/dev/null; then
-    printf '\n# 默认 python 环境: common (可被 source <other>/bin/activate 覆盖)\nexport PATH="/usr/local/uv/envs/common/bin:$PATH"\nexport VIRTUAL_ENV="/usr/local/uv/envs/common"\n' >> /root/.bashrc
 fi
 
 # =============================================================================
