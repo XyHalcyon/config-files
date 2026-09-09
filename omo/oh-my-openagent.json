@@ -1,0 +1,134 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "gateway/qwen3.7-max",
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "sisyphus-junior": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "gateway/qwen3.7-max",
+        "gateway/deepseek-v4-pro"
+      ]
+    },
+    "hephaestus": {
+      "model": "gateway/deepseek-v4-pro",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/glm-5.2"
+      ],
+      "allow_non_gpt_model": true
+    },
+    "oracle": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "codiz/claude-opus-4-8-thinking",
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "atlas": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/deepseek-v4-pro"
+      ]
+    },
+    "metis": {
+      "model": "gateway/qwen3.7-max",
+      "fallback_models": [
+        "codiz/claude-opus-4-8-thinking",
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "momus": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "codiz/claude-opus-4-8-thinking",
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "multimodal-looker": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/qwen3.7-max"
+      ]
+    },
+    "prometheus": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "codiz/claude-opus-4-8-thinking",
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "librarian": {
+      "model": "gateway/deepseek-v4-flash",
+      "fallback_models": [
+        "gateway/deepseek-v4-pro",
+        "gateway/glm-5.2"
+      ]
+    },
+    "explore": {
+      "model": "gateway/deepseek-v4-flash",
+      "fallback_models": [
+        "gateway/deepseek-v4-pro",
+        "gateway/glm-5.2"
+      ]
+    }
+  },
+  "categories": {
+    "artistry": {
+      "model": "gateway/glm-5.2",
+      "fallback_models": [
+        "codiz/claude-opus-4-8-thinking",
+        "codiz/claude-opus-4-8"
+      ]
+    },
+    "deep": {
+      "model": "gateway/deepseek-v4-pro",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/glm-5.2"
+      ]
+    },
+    "visual-engineering": {
+      "model": "gateway/deepseek-v4-pro",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/glm-5.2"
+      ]
+    },
+    "unspecified-high": {
+      "model": "gateway/qwen3.7-max",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/glm-5.2"
+      ]
+    },
+    "writing": {
+      "model": "gateway/qwen3.7-max",
+      "fallback_models": [
+        "codiz/claude-opus-4-8",
+        "gateway/glm-5.2"
+      ]
+    },
+    "unspecified-low": {
+      "model": "gateway/deepseek-v4-flash",
+      "fallback_models": [
+        "gateway/deepseek-v4-pro",
+        "gateway/glm-5.2"
+      ]
+    },
+    "quick": {
+      "model": "gateway/deepseek-v4-flash",
+      "fallback_models": [
+        "gateway/deepseek-v4-pro",
+        "gateway/glm-5.2"
+      ]
+    }
+  }
+}
