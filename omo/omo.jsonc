@@ -4,130 +4,138 @@
   "[opencode]": {
     "agents": {
       "sisyphus": {
-        "model": "bailian-payg/glm-5.2",
+        "model": "gateway/glm-5.2",
         "fallback_models": [
-          "bailian-payg/qwen3.7-max",
+          "gateway/qwen3.7-max",
           "codiz/claude-opus-4-8"
         ]
       },
       "sisyphus-junior": {
-        "model": "bailian-payg/glm-5.2",
+        "model": "gateway/glm-5.2",
         "fallback_models": [
-          "bailian-payg/qwen3.7-max",
-          "deepseek/deepseek-v4-pro"
+          "gateway/qwen3.7-max",
+          "gateway/deepseek-v4-pro"
         ]
       },
       "hephaestus": {
-        "model": "codiz/claude-opus-4-8",
-        "fallback_models": [
-          "deepseek/deepseek-v4-pro",
-          "bailian-payg/glm-5.2"
-        ],
-        "allow_non_gpt_model": true
-      },
-      "oracle": {
-        "model": "codiz/claude-opus-4-8-thinking",
+        "allow_non_gpt_model": true,
+        "model": "gateway/deepseek-v4-pro",
         "fallback_models": [
           "codiz/claude-opus-4-8",
-          "deepseek/deepseek-v4-pro"
+          "gateway/glm-5.2"
+        ]
+      },
+      "oracle": {
+        "model": "gateway/glm-5.2",
+        "fallback_models": [
+          "codiz/claude-opus-4-8-thinking",
+          "codiz/claude-opus-4-8"
         ]
       },
       "atlas": {
-        "model": "bailian-payg/glm-5.2",
+        "model": "gateway/glm-5.2",
         "fallback_models": [
           "codiz/claude-opus-4-8",
-          "deepseek/deepseek-v4-pro"
+          "gateway/deepseek-v4-pro"
         ]
       },
       "metis": {
-        "model": "bailian-payg/qwen3.7-max",
+        "model": "gateway/qwen3.7-max",
         "fallback_models": [
-          "codiz/claude-opus-4-8",
-          "codiz/claude-opus-4-8-thinking"
+          "codiz/claude-opus-4-8-thinking",
+          "codiz/claude-opus-4-8"
         ]
       },
       "momus": {
-        "model": "codiz/claude-opus-4-8-thinking",
+        "model": "gateway/glm-5.2",
         "fallback_models": [
-          "codiz/claude-opus-4-8",
-          "deepseek/deepseek-v4-pro"
+          "codiz/claude-opus-4-8-thinking",
+          "codiz/claude-opus-4-8"
         ]
       },
       "multimodal-looker": {
-        "model": "codiz/claude-opus-4-8",
+        "model": "gateway/glm-5.2",
         "fallback_models": [
-          "bailian-payg/glm-5.2",
-          "codiz/claude-opus-4-8-thinking"
+          "codiz/claude-opus-4-8",
+          "gateway/qwen3.7-max"
         ]
       },
       "prometheus": {
-        "model": "codiz/claude-opus-4-8-thinking",
+        "model": "gateway/glm-5.2",
         "fallback_models": [
-          "codiz/claude-opus-4-8",
-          "deepseek/deepseek-v4-pro"
+          "codiz/claude-opus-4-8-thinking",
+          "codiz/claude-opus-4-8"
         ]
       },
       "librarian": {
-        "model": "deepseek/deepseek-v4-flash",
+        "model": "gateway/deepseek-v4-flash",
         "fallback_models": [
-          "deepseek/deepseek-v4-pro",
-          "bailian-payg/glm-5.2"
+          "gateway/deepseek-v4-pro",
+          "gateway/glm-5.2"
         ]
       },
       "explore": {
-        "model": "deepseek/deepseek-v4-flash",
+        "model": "gateway/deepseek-v4-flash",
         "fallback_models": [
-          "deepseek/deepseek-v4-pro",
-          "bailian-payg/glm-5.2"
+          "gateway/deepseek-v4-pro",
+          "gateway/glm-5.2"
         ]
       }
     },
     "categories": {
       "artistry": {
         "models": [
+          "gateway/glm-5.2",
           "codiz/claude-opus-4-8-thinking",
           "codiz/claude-opus-4-8"
         ]
       },
       "deep": {
         "models": [
+          "gateway/deepseek-v4-pro",
           "codiz/claude-opus-4-8",
-          "deepseek/deepseek-v4-pro"
+          "gateway/glm-5.2"
         ]
       },
       "visual-engineering": {
         "models": [
+          "gateway/deepseek-v4-pro",
           "codiz/claude-opus-4-8",
-          "codiz/claude-opus-4-8-thinking"
+          "gateway/glm-5.2"
         ]
       },
       "unspecified-high": {
         "models": [
-          "bailian-payg/qwen3.7-max",
-          "codiz/claude-opus-4-8"
+          "gateway/qwen3.7-max",
+          "codiz/claude-opus-4-8",
+          "gateway/glm-5.2"
         ]
       },
       "writing": {
         "models": [
-          "bailian-payg/qwen3.7-max",
-          "codiz/claude-opus-4-8"
+          "gateway/qwen3.7-max",
+          "codiz/claude-opus-4-8",
+          "gateway/glm-5.2"
         ]
       },
       "unspecified-low": {
         "models": [
-          "deepseek/deepseek-v4-flash",
-          "deepseek/deepseek-v4-pro"
+          "gateway/deepseek-v4-flash",
+          "gateway/deepseek-v4-pro",
+          "gateway/glm-5.2"
         ]
       },
       "quick": {
         "models": [
-          "deepseek/deepseek-v4-flash",
-          "deepseek/deepseek-v4-pro"
+          "gateway/deepseek-v4-flash",
+          "gateway/deepseek-v4-pro",
+          "gateway/glm-5.2"
         ]
       }
     }
   },
   "_migrations": [
+    "2026-07-opencode-config-unification",
     "2026-08-reasoning-unification"
   ]
 }

@@ -51,17 +51,17 @@ OMO（oh-my-openagent）编排系统配置。部署至 `~/.omo/omo.jsonc`（独�
 
 | Agent | Primary Model | Fallback Models | 角色 |
 |---|---|---|---|
-| `sisyphus` | `bailian-payg/glm-5.2` | `bailian-payg/qwen3.7-max` → `codiz/claude-opus-4-8` | 主编排器 |
-| `sisyphus-junior` | `bailian-payg/glm-5.2` | `bailian-payg/qwen3.7-max` → `deepseek/deepseek-v4-pro` | 任务执行器 |
-| `hephaestus` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` → `bailian-payg/glm-5.2` | 构建器（`allow_non_gpt_model: true`） |
-| `oracle` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 高智商推理顾问 |
-| `atlas` | `bailian-payg/glm-5.2` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 研究索引 |
-| `metis` | `bailian-payg/qwen3.7-max` | `codiz/claude-opus-4-8` → `codiz/claude-opus-4-8-thinking` | 预规划顾问 |
-| `momus` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 计划审查 |
-| `multimodal-looker` | `codiz/claude-opus-4-8` | `bailian-payg/glm-5.2` → `codiz/claude-opus-4-8-thinking` | 视觉分析 |
-| `prometheus` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` → `deepseek/deepseek-v4-pro` | 规划器 |
-| `librarian` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` → `bailian-payg/glm-5.2` | 参考搜索 |
-| `explore` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` → `bailian-payg/glm-5.2` | 上下文搜索 |
+| `sisyphus` | `gateway/glm-5.2` | `gateway/qwen3.7-max` → `codiz/claude-opus-4-8` | 主编排器 |
+| `sisyphus-junior` | `gateway/glm-5.2` | `gateway/qwen3.7-max` → `gateway/deepseek-v4-pro` | 任务执行器 |
+| `hephaestus` | `gateway/deepseek-v4-pro` | `codiz/claude-opus-4-8` → `gateway/glm-5.2` | 构建器（`allow_non_gpt_model: true`） |
+| `oracle` | `gateway/glm-5.2` | `codiz/claude-opus-4-8-thinking` → `codiz/claude-opus-4-8` | 高智商推理顾问 |
+| `atlas` | `gateway/glm-5.2` | `codiz/claude-opus-4-8` → `gateway/deepseek-v4-pro` | 研究索引 |
+| `metis` | `gateway/qwen3.7-max` | `codiz/claude-opus-4-8-thinking` → `codiz/claude-opus-4-8` | 预规划顾问 |
+| `momus` | `gateway/glm-5.2` | `codiz/claude-opus-4-8-thinking` → `codiz/claude-opus-4-8` | 计划审查 |
+| `multimodal-looker` | `gateway/glm-5.2` | `codiz/claude-opus-4-8` → `gateway/qwen3.7-max` | 视觉分析 |
+| `prometheus` | `gateway/glm-5.2` | `codiz/claude-opus-4-8-thinking` → `codiz/claude-opus-4-8` | 规划器 |
+| `librarian` | `gateway/deepseek-v4-flash` | `gateway/deepseek-v4-pro` → `gateway/glm-5.2` | 参考搜索 |
+| `explore` | `gateway/deepseek-v4-flash` | `gateway/deepseek-v4-pro` → `gateway/glm-5.2` | 上下文搜索 |
 
 > **注**：`hephaestus.allow_non_gpt_model: true` 允许该构建器使用非 GPT 系模型（如 GLM、Qwen），用于跨厂商模型调度。
 
@@ -69,15 +69,15 @@ OMO（oh-my-openagent）编排系统配置。部署至 `~/.omo/omo.jsonc`（独�
 
 | Category | Primary Model | Fallback Models | 用途 |
 |---|---|---|---|
-| `artistry` | `codiz/claude-opus-4-8-thinking` | `codiz/claude-opus-4-8` | 创意方案 |
-| `deep` | `codiz/claude-opus-4-8` | `deepseek/deepseek-v4-pro` | 自主研究 + 实现 |
-| `visual-engineering` | `codiz/claude-opus-4-8` | `codiz/claude-opus-4-8-thinking` | 前端 / UI / 样式 |
-| `unspecified-high` | `bailian-payg/qwen3.7-max` | `codiz/claude-opus-4-8` | 未分类高复杂度 |
-| `writing` | `bailian-payg/qwen3.7-max` | `codiz/claude-opus-4-8` | 文档 / 写作 |
-| `unspecified-low` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` | 未分类低复杂度 |
-| `quick` | `deepseek/deepseek-v4-flash` | `deepseek/deepseek-v4-pro` | 简单单文件修改 |
+| `artistry` | `gateway/glm-5.2` | `codiz/claude-opus-4-8-thinking` → `codiz/claude-opus-4-8` | 创意方案 |
+| `deep` | `gateway/deepseek-v4-pro` | `codiz/claude-opus-4-8` → `gateway/glm-5.2` | 自主研究 + 实现 |
+| `visual-engineering` | `gateway/deepseek-v4-pro` | `codiz/claude-opus-4-8` → `gateway/glm-5.2` | 前端 / UI / 样式 |
+| `unspecified-high` | `gateway/qwen3.7-max` | `codiz/claude-opus-4-8` → `gateway/glm-5.2` | 未分类高复杂度 |
+| `writing` | `gateway/qwen3.7-max` | `codiz/claude-opus-4-8` → `gateway/glm-5.2` | 文档 / 写作 |
+| `unspecified-low` | `gateway/deepseek-v4-flash` | `gateway/deepseek-v4-pro` → `gateway/glm-5.2` | 未分类低复杂度 |
+| `quick` | `gateway/deepseek-v4-flash` | `gateway/deepseek-v4-pro` → `gateway/glm-5.2` | 简单单文件修改 |
 
-> **变更摘要**（相对老版 `opencode/oh-my-openagent.json`）：① 配置目录从 `~/.config/opencode/` 迁至 `~/.omo/`；② 顶层加 `[opencode]` 命名空间与 `_migrations` 字段；③ categories 结构从 `model` + `fallback_models` 改为 `models` 数组；④ 删除 `ultrabrain` category（用途并入 `artistry`）；⑤ `hephaestus` 新增 `allow_non_gpt_model`；⑥ 全表去除 `alibaba-cn` provider，改用 `codiz` / `bailian-payg` / `deepseek`。
+> **变更摘要**（相对老版 `opencode/oh-my-openagent.json`）：① 配置目录从 `~/.config/opencode/` 迁至 `~/.omo/`；② 顶层加 `[opencode]` 命名空间与 `_migrations` 字段；③ categories 结构从 `model` + `fallback_models` 改为 `models` 数组；④ 删除 `ultrabrain` category（用途并入 `artistry`）；⑤ `hephaestus` 新增 `allow_non_gpt_model`；⑥ provider 统一为 `codiz` / `gateway`（glm / qwen / deepseek 均经 `gateway` AI Gateway 路由）。
 
 ---
 
