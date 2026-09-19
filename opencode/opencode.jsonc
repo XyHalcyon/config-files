@@ -67,6 +67,12 @@
         "glm-5.2": {
           "name": "GLM 5.2"
         },
+        "glm-5.3": {
+          "name": "GLM 5.3"
+        },
+        "glm-5.3-flash": {
+          "name": "GLM 5.3 Flash"
+        },
         "qwen3.7-max": {
           "name": "Qwen3.7-Max"
         },
